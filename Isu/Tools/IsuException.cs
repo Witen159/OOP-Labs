@@ -6,7 +6,7 @@ namespace Isu.Tools
     {
         public IsuException()
         {
-            //first commit
+            // first commit
         }
 
         public IsuException(string message) : base(message)
