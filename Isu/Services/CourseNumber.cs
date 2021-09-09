@@ -4,10 +4,7 @@
     {
         private readonly int _courseNumber;
 
-        public CourseNumber(int courseNumber)
-        {
-            _courseNumber = courseNumber;
-        }
+        public CourseNumber(int courseNumber) => _courseNumber = courseNumber;
 
         public int GetCourseNumber()
         {
