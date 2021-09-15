@@ -16,8 +16,8 @@ namespace Isu.Services
             GroupName = groupName;
             GroupNumber = int.Parse(groupName[3..]);
             GroupCourse = new CourseNumber(int.Parse(groupName[2].ToString()));
-            if (GroupCourse.Number > MaxNumberOfCourses)
-                throw new ExceededMaxNumberOfCoursesIsuException();
+            if (GroupCourse.Number > MaxNumberOfCourses || GroupCourse.Number < 1)
+                throw new InvalidCourseNumberIsuException();
             GroupSpecialisation = groupName[..1];
             _groupStudents = new List<Student>();
             if (GroupName.Length != 5 || !char.IsUpper(groupName[0]) || !int.TryParse(groupName[1..], out int temp))
@@ -38,8 +38,19 @@ namespace Isu.Services
         {
             if (_numberOfStudents >= MaxNumberOfStudents)
                 throw new ExceededMaxNumberOfStudentIsuException();
+            newStudent.StudentsGroupName = GroupName;
             _numberOfStudents++;
             _groupStudents.Add(newStudent);
+        }
+
+        public void RemoveStudent(Student removedStudent)
+        {
+            if (!_groupStudents.Remove(removedStudent))
+            {
+                throw new NoStudentInGroupIsuException();
+            }
+
+            removedStudent.StudentsGroupName = null;
         }
     }
 }

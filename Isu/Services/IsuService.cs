@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Isu.Tools;
 
 namespace Isu.Services
 {
@@ -21,6 +22,8 @@ namespace Isu.Services
 
         public Student AddStudent(Group group, string name)
         {
+            if (FindStudent(name) != null)
+                throw new AddingExistingStudentIsuException();
             var newStudent = new Student(name);
             group.AddStudent(newStudent);
             return newStudent;
@@ -28,8 +31,9 @@ namespace Isu.Services
 
         public Student RemoveStudent(Group group, string name)
         {
-            var removedStudent = new Student(name);
-            return !group.GetAllStudents().Remove(removedStudent) ? null : removedStudent;
+            Student removedStudent = FindStudent(name);
+            group.RemoveStudent(removedStudent);
+            return removedStudent;
         }
 
         public Student GetStudent(int id)
@@ -43,7 +47,7 @@ namespace Isu.Services
                 }
             }
 
-            throw new Exception("No student with ID " + id.ToString());
+            throw new InvalideStudentIsuException();
         }
 
         public Student FindStudent(string name)
@@ -92,17 +96,9 @@ namespace Isu.Services
 
         public Group FindStudentsGroup(Student student)
         {
-            foreach (Group group in _groups)
-            {
-                foreach (Student studentInGroup in group.GetAllStudents())
-                {
-                    if (studentInGroup.Id == student.Id)
-                        return group;
-                }
-            }
+            return FindGroup(student.StudentsGroupName);
 
             // throw new Exception("No student" + student.Name + " in groups");
-            return null;
         }
 
         public Group FindGroup(string groupName)
@@ -136,8 +132,7 @@ namespace Isu.Services
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            RemoveStudent(FindStudentsGroup(student), student.Name);
-            AddStudent(newGroup, student.Name);
+            newGroup.AddStudent(RemoveStudent(FindStudentsGroup(student), student.Name));
         }
     }
 }

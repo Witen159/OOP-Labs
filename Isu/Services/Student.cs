@@ -9,9 +9,11 @@
             Name = name;
             Id = _currentId;
             _currentId++;
+            StudentsGroupName = null;
         }
 
         public string Name { get; }
         public int Id { get; }
+        public string StudentsGroupName { get; set; }
     }
 }
