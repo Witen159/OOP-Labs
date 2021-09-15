@@ -1,52 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using Isu.Tools;
 
 namespace Isu.Services
 {
     public class Group
     {
-        private readonly CourseNumber _groupCourse;
-        private readonly int _groupNumber;
-        private readonly string _groupName;
-        private readonly string _groupSpecialisation;
+        private const int MaxNumberOfStudents = 30;
+        private const int MaxNumberOfCourses = 4;
         private readonly List<Student> _groupStudents;
-
+        private int _numberOfStudents;
         public Group(string groupName)
         {
-            _groupName = groupName;
-            _groupNumber = int.Parse(groupName[3..]);
-            _groupCourse = new CourseNumber(int.Parse(groupName[2].ToString()));
-            _groupSpecialisation = groupName[..1];
+            _numberOfStudents = 0;
+            GroupName = groupName;
+            GroupNumber = int.Parse(groupName[3..]);
+            GroupCourse = new CourseNumber(int.Parse(groupName[2].ToString()));
+            if (GroupCourse.Number > MaxNumberOfCourses)
+                throw new ExceededMaxNumberOfCoursesIsuException();
+            GroupSpecialisation = groupName[..1];
             _groupStudents = new List<Student>();
+            if (GroupName.Length != 5 || !char.IsUpper(groupName[0]) || !int.TryParse(groupName[1..], out int temp))
+                throw new InvalidNameOfGroupIsuException();
         }
+
+        public string GroupName { get; }
+        public int GroupNumber { get; }
+        public string GroupSpecialisation { get; }
+        public CourseNumber GroupCourse { get; }
 
         public List<Student> GetAllStudents()
         {
             return _groupStudents;
         }
 
-        // public void AddNewStudent(Student newStudent)
-        // {
-        //     _groupStudents.Add(newStudent);
-        // }
-        public string GetGroupName()
+        public void AddStudent(Student newStudent)
         {
-            return _groupName;
-        }
-
-        public int GetGroupNumber()
-        {
-            return _groupNumber;
-        }
-
-        public string GetGroupSpecialisation()
-        {
-            return _groupSpecialisation;
-        }
-
-        public CourseNumber GetCourse()
-        {
-            return _groupCourse;
+            if (_numberOfStudents >= MaxNumberOfStudents)
+                throw new ExceededMaxNumberOfStudentIsuException();
+            _numberOfStudents++;
+            _groupStudents.Add(newStudent);
         }
     }
 }

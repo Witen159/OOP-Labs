@@ -2,13 +2,8 @@
 {
     public class CourseNumber
     {
-        private readonly int _courseNumber;
+        public CourseNumber(int courseNumber) => Number = courseNumber;
 
-        public CourseNumber(int courseNumber) => _courseNumber = courseNumber;
-
-        public int GetCourseNumber()
-        {
-            return _courseNumber;
-        }
+        public int Number { get; }
     }
 }

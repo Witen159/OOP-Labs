@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Isu.Services
 {
-    public class Isu : IIsuService
+    public class IsuService : IIsuService
     {
-        private List<Group> _groups;
+        private readonly List<Group> _groups;
 
-        public Isu()
+        public IsuService()
         {
             _groups = new List<Group>();
         }
@@ -22,16 +22,14 @@ namespace Isu.Services
         public Student AddStudent(Group group, string name)
         {
             var newStudent = new Student(name);
-            group.GetAllStudents().Add(newStudent);
+            group.AddStudent(newStudent);
             return newStudent;
         }
 
         public Student RemoveStudent(Group group, string name)
         {
             var removedStudent = new Student(name);
-            if (!group.GetAllStudents().Remove(removedStudent))
-                throw new Exception("No student with name " + name.ToString() + " in group " + group.GetGroupName());
-            return removedStudent;
+            return !group.GetAllStudents().Remove(removedStudent) ? null : removedStudent;
         }
 
         public Student GetStudent(int id)
@@ -40,7 +38,7 @@ namespace Isu.Services
             {
                 foreach (Student student in group.GetAllStudents())
                 {
-                    if (id == student.GetId())
+                    if (id == student.Id)
                         return student;
                 }
             }
@@ -54,23 +52,25 @@ namespace Isu.Services
             {
                 foreach (Student student in group.GetAllStudents())
                 {
-                    if (name == student.GetName())
+                    if (name == student.Name)
                         return student;
                 }
             }
 
-            throw new Exception("No student with name " + name.ToString());
+            // throw new Exception("No student with name " + name.ToString());
+            return null;
         }
 
         public List<Student> FindStudents(string groupName)
         {
             foreach (Group group in _groups)
             {
-                if (groupName == group.GetGroupName())
+                if (groupName == group.GroupName)
                     return group.GetAllStudents();
             }
 
-            throw new Exception("No group with name " + groupName.ToString());
+            // throw new Exception("No group with name " + groupName.ToString());
+            return new List<Student>();
         }
 
         public List<Student> FindStudents(CourseNumber courseNumber)
@@ -79,14 +79,14 @@ namespace Isu.Services
 
             foreach (Group group in _groups)
             {
-                if (courseNumber == group.GetCourse())
+                if (courseNumber.Number == group.GroupCourse.Number)
                 {
                     studentsInCourse.AddRange(group.GetAllStudents());
                 }
             }
 
-            if (studentsInCourse.Count == 0)
-                throw new Exception("No students in course " + courseNumber.GetCourseNumber().ToString());
+            // if (studentsInCourse.Count == 0)
+            //     throw new Exception("No students in course " + courseNumber.Number.ToString());
             return studentsInCourse;
         }
 
@@ -96,23 +96,25 @@ namespace Isu.Services
             {
                 foreach (Student studentInGroup in group.GetAllStudents())
                 {
-                    if (studentInGroup == student)
+                    if (studentInGroup.Id == student.Id)
                         return group;
                 }
             }
 
-            throw new Exception("No student" + student.GetName() + " in groups");
+            // throw new Exception("No student" + student.Name + " in groups");
+            return null;
         }
 
         public Group FindGroup(string groupName)
         {
             foreach (Group group in _groups)
             {
-                if (groupName == group.GetGroupName())
+                if (groupName == group.GroupName)
                     return group;
             }
 
-            throw new Exception("No group with name " + groupName.ToString());
+            // throw new Exception("No group with name " + groupName.ToString());
+            return null;
         }
 
         public List<Group> FindGroups(CourseNumber courseNumber)
@@ -121,21 +123,21 @@ namespace Isu.Services
 
             foreach (Group group in _groups)
             {
-                if (courseNumber == group.GetCourse())
+                if (courseNumber.Number == group.GroupCourse.Number)
                 {
                     groupsInCourse.Add(group);
                 }
             }
 
-            if (groupsInCourse.Count == 0)
-                throw new Exception("No groups in course " + courseNumber.GetCourseNumber().ToString());
+            // if (groupsInCourse.Count == 0)
+            //     throw new Exception("No groups in course " + courseNumber.Number.ToString());
             return groupsInCourse;
         }
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            RemoveStudent(FindStudentsGroup(student), student.GetName());
-            AddStudent(newGroup, student.GetName());
+            RemoveStudent(FindStudentsGroup(student), student.Name);
+            AddStudent(newGroup, student.Name);
         }
     }
 }
