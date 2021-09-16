@@ -6,12 +6,7 @@ namespace Isu.Services
 {
     public class IsuService : IIsuService
     {
-        private readonly List<Group> _groups;
-
-        public IsuService()
-        {
-            _groups = new List<Group>();
-        }
+        private readonly List<Group> _groups = new List<Group>();
 
         public Group AddGroup(string name)
         {
@@ -61,7 +56,6 @@ namespace Isu.Services
                 }
             }
 
-            // throw new Exception("No student with name " + name.ToString());
             return null;
         }
 
@@ -73,7 +67,6 @@ namespace Isu.Services
                     return group.GetAllStudents();
             }
 
-            // throw new Exception("No group with name " + groupName.ToString());
             return new List<Student>();
         }
 
@@ -89,16 +82,12 @@ namespace Isu.Services
                 }
             }
 
-            // if (studentsInCourse.Count == 0)
-            //     throw new Exception("No students in course " + courseNumber.Number.ToString());
             return studentsInCourse;
         }
 
         public Group FindStudentsGroup(Student student)
         {
             return FindGroup(student.StudentsGroupName);
-
-            // throw new Exception("No student" + student.Name + " in groups");
         }
 
         public Group FindGroup(string groupName)
@@ -109,7 +98,6 @@ namespace Isu.Services
                     return group;
             }
 
-            // throw new Exception("No group with name " + groupName.ToString());
             return null;
         }
 
@@ -125,8 +113,6 @@ namespace Isu.Services
                 }
             }
 
-            // if (groupsInCourse.Count == 0)
-            //     throw new Exception("No groups in course " + courseNumber.Number.ToString());
             return groupsInCourse;
         }
 

@@ -7,7 +7,6 @@ namespace Isu.Services
     public class Group
     {
         private const int MaxNumberOfStudents = 30;
-        private const int MaxNumberOfCourses = 4;
         private readonly List<Student> _groupStudents;
         private int _numberOfStudents;
         public Group(string groupName)
@@ -16,8 +15,6 @@ namespace Isu.Services
             GroupName = groupName;
             GroupNumber = int.Parse(groupName[3..]);
             GroupCourse = new CourseNumber(int.Parse(groupName[2].ToString()));
-            if (GroupCourse.Number > MaxNumberOfCourses || GroupCourse.Number < 1)
-                throw new InvalidCourseNumberIsuException();
             GroupSpecialisation = groupName[..1];
             _groupStudents = new List<Student>();
             if (GroupName.Length != 5 || !char.IsUpper(groupName[0]) || !int.TryParse(groupName[1..], out int temp))

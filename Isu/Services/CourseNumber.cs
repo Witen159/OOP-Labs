@@ -1,8 +1,16 @@
-﻿namespace Isu.Services
+﻿using Isu.Tools;
+
+namespace Isu.Services
 {
     public class CourseNumber
     {
-        public CourseNumber(int courseNumber) => Number = courseNumber;
+        private const int MaxNumberOfCourses = 4;
+        public CourseNumber(int courseNumber)
+        {
+            if (courseNumber > MaxNumberOfCourses || courseNumber < 1)
+                throw new InvalidCourseNumberIsuException();
+            Number = courseNumber;
+        }
 
         public int Number { get; }
     }

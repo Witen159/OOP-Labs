@@ -14,6 +14,8 @@
 
         public string Name { get; }
         public int Id { get; }
+
+        // TODO: Group class, not name
         public string StudentsGroupName { get; set; }
     }
 }
