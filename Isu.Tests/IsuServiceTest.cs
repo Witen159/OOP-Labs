@@ -20,7 +20,7 @@ namespace Isu.Tests
         {
             Group newGroup = _isuService.AddGroup("M3204");
             _isuService.AddStudent(newGroup, "Bespalov Denis");
-            Assert.IsNotNull(newGroup.GetAllStudents()[0].StudentsGroupName);
+            Assert.IsNotNull(newGroup.GetAllStudents()[0].StudentsGroup);
             Assert.IsNotEmpty(newGroup.GetAllStudents());
         }
 
@@ -51,11 +51,11 @@ namespace Isu.Tests
             Group oldGroup = _isuService.AddGroup("M3204");
             Group newGroup = _isuService.AddGroup("M3200");
             _isuService.AddStudent(oldGroup, "Bespalov Denis");
-            string studentsOldGroup = oldGroup.GetAllStudents()[0].StudentsGroupName;
+            Group studentsOldGroup = oldGroup.GetAllStudents()[0].StudentsGroup;
             _isuService.ChangeStudentGroup(_isuService.FindStudent("Bespalov Denis"), newGroup);
             Assert.Contains(_isuService.FindStudent("Bespalov Denis"), newGroup.GetAllStudents());
             Assert.IsEmpty(oldGroup.GetAllStudents());
-            Assert.True(studentsOldGroup != _isuService.FindStudent("Bespalov Denis").StudentsGroupName);
+            Assert.True(studentsOldGroup != _isuService.FindStudent("Bespalov Denis").StudentsGroup);
         }
     }
 }

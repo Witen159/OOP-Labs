@@ -35,7 +35,7 @@ namespace Isu.Services
         {
             if (_numberOfStudents >= MaxNumberOfStudents)
                 throw new ExceededMaxNumberOfStudentIsuException();
-            newStudent.StudentsGroupName = GroupName;
+            newStudent.StudentsGroup = this;
             _numberOfStudents++;
             _groupStudents.Add(newStudent);
         }
@@ -47,7 +47,7 @@ namespace Isu.Services
                 throw new NoStudentInGroupIsuException();
             }
 
-            removedStudent.StudentsGroupName = null;
+            removedStudent.StudentsGroup = null;
         }
     }
 }

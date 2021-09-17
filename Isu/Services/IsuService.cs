@@ -87,7 +87,7 @@ namespace Isu.Services
 
         public Group FindStudentsGroup(Student student)
         {
-            return FindGroup(student.StudentsGroupName);
+            return student.StudentsGroup;
         }
 
         public Group FindGroup(string groupName)
@@ -118,7 +118,7 @@ namespace Isu.Services
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            newGroup.AddStudent(RemoveStudent(FindStudentsGroup(student), student.Name));
+            newGroup.AddStudent(RemoveStudent(student.StudentsGroup, student.Name));
         }
     }
 }

@@ -9,13 +9,11 @@
             Name = name;
             Id = _currentId;
             _currentId++;
-            StudentsGroupName = null;
+            StudentsGroup = null;
         }
 
         public string Name { get; }
         public int Id { get; }
-
-        // TODO: Group class, not name
-        public string StudentsGroupName { get; set; }
+        public Group StudentsGroup { get; set; }
     }
 }
