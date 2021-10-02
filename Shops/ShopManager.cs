@@ -4,10 +4,12 @@ namespace Shops
 {
     public class ShopManager
     {
-        private List<Product> _availableProducts = new List<Product>();
-        private List<Shop> _shops = new List<Shop>();
+        private List<string> _availableProducts;
+        private List<Shop> _shops;
         public ShopManager()
         {
+            _availableProducts = new List<string>();
+            _shops = new List<Shop>();
         }
 
         public Shop AddShop(string shopName, string shopAdress)
@@ -17,11 +19,9 @@ namespace Shops
             return newShop;
         }
 
-        public Product RegisterProduct(string productName)
+        public void RegisterProduct(string productName)
         {
-            Product newProduct = new Product(productName);
-            _availableProducts.Add(newProduct);
-            return newProduct;
+            _availableProducts.Add(productName);
         }
 
         public Shop FindTheBestOffer(Product product, int numberOfProducts)
