@@ -1,6 +1,7 @@
 ﻿using System;
+using Shops.Exception;
 
-namespace Shops
+namespace Shops.Architecture
 {
     public class Product
     {
@@ -8,7 +9,7 @@ namespace Shops
         {
             ProductName = productName;
             if (numberOfProducts <= 0 || coast <= 0)
-                throw new Exception();
+                throw new IncorrectProductSpecificationsShopException();
             NumberOfProducts = numberOfProducts;
             Coast = coast;
         }

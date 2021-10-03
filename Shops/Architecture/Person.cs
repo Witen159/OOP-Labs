@@ -1,0 +1,24 @@
+﻿using System;
+using Shops.Exception;
+
+namespace Shops.Architecture
+{
+    public class Person
+    {
+        public Person(string name, int money)
+        {
+            Name = name;
+            if (money < 0)
+                throw new InvalidPersonMoneyShopException();
+            Money = money;
+        }
+
+        public string Name { get; }
+        public int Money { get; private set; }
+
+        public void Pay(int price)
+        {
+            Money -= price;
+        }
+    }
+}
