@@ -64,7 +64,7 @@ namespace Shops.Tests
             thirdShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 2, smallestCoast)}); // Smallest, but too little product
             fourthShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 7, higherCoast)});
             
-            Assert.IsTrue(ShopManager.FindTheBestOffer(new Order(nameOfProduct, 3)).ShopName == secondShop.ShopName);
+            Assert.IsTrue(ShopManager.FindTheBestOffer(new Order(nameOfProduct, 3)).ShopId == secondShop.ShopId);
         }
         
         [Test]
