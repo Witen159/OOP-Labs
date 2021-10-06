@@ -57,9 +57,9 @@ namespace Shops.Architecture
                 {
                     if (product.ProductName == currentOrder.ProductName)
                     {
-                        price += currentOrder.NumberOfProduct * product.Coast;
                         if (product.NumberOfProducts < currentOrder.NumberOfProduct)
                             throw new InvalidPurchaseShopException();
+                        price += currentOrder.NumberOfProduct * product.Cost;
                         changedProducts.Add(product);
                         isPurchaseCompleted = true;
                         break;
@@ -86,7 +86,7 @@ namespace Shops.Architecture
             foreach (Product product in _allProducts)
             {
                 if (product.ProductName == productName)
-                    product.Coast = newCoast;
+                    product.Cost = newCoast;
             }
         }
 

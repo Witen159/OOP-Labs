@@ -18,7 +18,14 @@ namespace Shops.Architecture
 
         public void Pay(int price)
         {
+            if (price > Money)
+                throw new InvalidPersonMoneyShopException();
             Money -= price;
+        }
+
+        public void TopUpAccount(int depositAmount)
+        {
+            Money += depositAmount;
         }
     }
 }

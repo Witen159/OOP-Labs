@@ -29,10 +29,10 @@ namespace Shops.Architecture
                 {
                     if (currentProduct.ProductName == order.ProductName)
                     {
-                        if (currentProduct.Coast < minCost && currentProduct.NumberOfProducts >= order.NumberOfProduct)
+                        if (currentProduct.Cost < minCost && currentProduct.NumberOfProducts >= order.NumberOfProduct)
                         {
                             bestOfferShop = currentShop;
-                            minCost = currentProduct.Coast;
+                            minCost = currentProduct.Cost;
                         }
 
                         break;

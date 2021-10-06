@@ -38,10 +38,10 @@ namespace Shops.Tests
             
             ShopManager.RegisterProduct(nameOfProduct);
             bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 10, oldCoast)});
-            Assert.IsTrue(bestShop.GetAllProducts()[0].Coast == oldCoast);
+            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == oldCoast);
             
             bestShop.ChangeProductCoast(nameOfProduct, newCoat);
-            Assert.IsTrue(bestShop.GetAllProducts()[0].Coast == newCoat);
+            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == newCoat);
         }
         
         [Test]
