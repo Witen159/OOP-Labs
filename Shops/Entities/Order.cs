@@ -1,4 +1,4 @@
-﻿namespace Shops.Architecture
+﻿namespace Shops.Entities
 {
     public class Order
     {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
+﻿using System.Collections.Generic;
 using Shops.Exception;
 
-namespace Shops.Architecture
+namespace Shops.Entities
 {
     public class Shop
     {
@@ -17,24 +15,23 @@ namespace Shops.Architecture
             _currentShopId++;
             ShopMoney = 100000;
             _allShelfs = new List<Shelf>();
+            AllReadOnlyShelfs = _allShelfs.AsReadOnly();
         }
 
         public string ShopName { get; }
         public string Address { get; }
         public int ShopId { get; }
         public int ShopMoney { get; private set; }
+        public IReadOnlyList<Shelf> AllReadOnlyShelfs { get; }
 
-        public void AddProducts(List<Shelf> shelfs, ShopManager shopManager)
+        public void AddProducts(List<Shelf> shelfs)
         {
             foreach (Shelf shelf in shelfs)
             {
-                if (!shopManager.GetRegisteredProducts().Contains(shelf.ProductInShelf))
-                    throw new UnregisteredProductShopException();
-
                 bool isProductPresent = false;
                 foreach (Shelf shopsShelf in _allShelfs)
                 {
-                    if (shelf.ProductInShelf.ProductName == shopsShelf.ProductInShelf.ProductName)
+                    if (shelf == shopsShelf)
                     {
                         isProductPresent = true;
                         shopsShelf.NumberOfProducts += shelf.NumberOfProducts;
@@ -55,7 +52,7 @@ namespace Shops.Architecture
                 bool isPurchaseCompleted = false;
                 foreach (Shelf shelf in _allShelfs)
                 {
-                    if (shelf.ProductInShelf.ProductName == currentOrder.Product.ProductName)
+                    if (shelf.ProductInShelf == currentOrder.Product)
                     {
                         if (shelf.NumberOfProducts < currentOrder.NumberOfProduct)
                             throw new InvalidPurchaseShopException();
@@ -85,7 +82,7 @@ namespace Shops.Architecture
         {
             foreach (Shelf shelf in _allShelfs)
             {
-                if (shelf.ProductInShelf.ProductName == product.ProductName)
+                if (shelf.ProductInShelf == product)
                     shelf.Cost = newCoast;
             }
         }

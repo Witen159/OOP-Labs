@@ -1,6 +1,6 @@
 ﻿using Shops.Exception;
 
-namespace Shops.Architecture
+namespace Shops.Entities
 {
     public class Shelf
     {
@@ -16,5 +16,20 @@ namespace Shops.Architecture
         public Product ProductInShelf { get; }
         public int NumberOfProducts { get; set; }
         public int Cost { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Shelf objectType)
+            {
+                return this.ProductInShelf == objectType.ProductInShelf;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using Shops.Architecture;
 using Shops.Exception;
 using NUnit.Framework;
+using Shops.Entities;
+using Shops.Manager;
 
 namespace Shops.Tests
 {
@@ -29,11 +30,11 @@ namespace Shops.Tests
             var fanOfTaylorSwift = new Person("Sasha Blashenkov", moneyOfPerson);
             
             _shopManager.RegisterProduct(product);
-            bestShop.AddProducts(new List<Shelf>() {new Shelf(product, numberOfTShirts, costOfTShirts)}, _shopManager);
+            _shopManager.AddProductsToShop(bestShop,new List<Shelf>() {new Shelf(product, numberOfTShirts, costOfTShirts)});
             bestShop.Purchase(fanOfTaylorSwift, new List<Order>() {new Order(product, numberOfPurchasedTShirts)});
             
             Assert.IsTrue(moneyOfPerson == fanOfTaylorSwift.Money + numberOfPurchasedTShirts * costOfTShirts);
-            Assert.IsTrue(bestShop.GetAllShelfs()[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
+            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
         }
         
         [Test]
@@ -46,11 +47,11 @@ namespace Shops.Tests
             Shop bestShop = _shopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
             
             _shopManager.RegisterProduct(product);
-            bestShop.AddProducts(new List<Shelf>() {new Shelf(product, 10, oldCost)}, _shopManager);
-            Assert.IsTrue(bestShop.GetAllShelfs()[0].Cost == oldCost);
+            _shopManager.AddProductsToShop(bestShop, new List<Shelf>() {new Shelf(product, 10, oldCost)});
+            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].Cost == oldCost);
             
             bestShop.ChangeProductCost(product, newCost);
-            Assert.IsTrue(bestShop.GetAllShelfs()[0].Cost == newCost);
+            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].Cost == newCost);
         }
         
         [Test]
@@ -68,10 +69,10 @@ namespace Shops.Tests
             Shop fourthShop = _shopManager.AddShop("Ashan", "Frunze 19");
             
             _shopManager.RegisterProduct(product);
-            firstShop.AddProducts(new List<Shelf>() {new Shelf(product, 6, defaultCost)}, _shopManager);
-            secondShop.AddProducts(new List<Shelf>() {new Shelf(product, 5, smallerCost)}, _shopManager);
-            thirdShop.AddProducts(new List<Shelf>() {new Shelf(product, 2, smallestCost)}, _shopManager); // Smallest, but too little product
-            fourthShop.AddProducts(new List<Shelf>() {new Shelf(product, 7, higherCost)}, _shopManager);
+            _shopManager.AddProductsToShop(firstShop, new List<Shelf>() {new Shelf(product, 6, defaultCost)});
+            _shopManager.AddProductsToShop(secondShop, new List<Shelf>() {new Shelf(product, 5, smallerCost)});
+            _shopManager.AddProductsToShop(thirdShop, new List<Shelf>() {new Shelf(product, 2, smallestCost)}); // Smallest, but too little product
+            _shopManager.AddProductsToShop(fourthShop, new List<Shelf>() {new Shelf(product, 7, higherCost)});
             
             Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(product, 3)).ShopId == secondShop.ShopId);
         }
@@ -93,12 +94,12 @@ namespace Shops.Tests
             _shopManager.RegisterProduct(firstProduct);
             _shopManager.RegisterProduct(secondProduct);
             _shopManager.RegisterProduct(thirdProduct);
-            shop.AddProducts(new List<Shelf>()
+            _shopManager.AddProductsToShop(shop, new List<Shelf>()
             {
                 new Shelf(firstProduct, defaultNumber, defaultCost),
                 new Shelf(secondProduct, defaultNumber, defaultCost),
                 new Shelf(thirdProduct, defaultNumber, defaultCost)
-            }, _shopManager);
+            });
             
             // Not enough money
             Assert.Catch<ShopException>(() =>
@@ -134,7 +135,7 @@ namespace Shops.Tests
             var newNumberOfProducts = new List<int>();
             for (int i = 0; i < 3; i++)
             {
-                newNumberOfProducts.Add(shop.GetAllShelfs()[i].NumberOfProducts);
+                newNumberOfProducts.Add(shop.AllReadOnlyShelfs[i].NumberOfProducts);
             }
             Assert.IsTrue(newNumberOfProducts[0] == defaultNumber - 2 
                           && newNumberOfProducts[1] == defaultNumber - 3 

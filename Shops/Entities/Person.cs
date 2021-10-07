@@ -1,7 +1,6 @@
-﻿using System;
-using Shops.Exception;
+﻿using Shops.Exception;
 
-namespace Shops.Architecture
+namespace Shops.Entities
 {
     public class Person
     {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Shops.Entities;
+using Shops.Exception;
 
-namespace Shops.Architecture
+namespace Shops.Manager
 {
     public class ShopManager
     {
@@ -25,9 +27,9 @@ namespace Shops.Architecture
             int minCost = int.MaxValue;
             foreach (Shop currentShop in _shops)
             {
-                foreach (Shelf currentShelf in currentShop.GetAllShelfs())
+                foreach (Shelf currentShelf in currentShop.AllReadOnlyShelfs)
                 {
-                    if (currentShelf.ProductInShelf.ProductName == order.Product.ProductName)
+                    if (currentShelf.ProductInShelf == order.Product)
                     {
                         if (currentShelf.Cost < minCost && currentShelf.NumberOfProducts >= order.NumberOfProduct)
                         {
@@ -43,9 +45,15 @@ namespace Shops.Architecture
             return bestOfferShop;
         }
 
-        public List<Product> GetRegisteredProducts()
+        public void AddProductsToShop(Shop shop, List<Shelf> shelfs)
         {
-            return _availableProducts;
+            foreach (Shelf shelf in shelfs)
+            {
+                if (!_availableProducts.Contains(shelf.ProductInShelf))
+                    throw new UnregisteredProductShopException();
+            }
+
+            shop.AddProducts(shelfs);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Shops.Architecture;
+using Shops.Entities;
 using Shops.Exception;
 
 namespace Shops
