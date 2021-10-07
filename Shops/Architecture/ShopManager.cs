@@ -2,24 +2,24 @@
 
 namespace Shops.Architecture
 {
-    public static class ShopManager
+    public class ShopManager
     {
-        private static List<string> _availableProducts = new List<string>();
-        private static List<Shop> _shops = new List<Shop>();
+        private List<string> _availableProducts = new List<string>();
+        private List<Shop> _shops = new List<Shop>();
 
-        public static Shop AddShop(string shopName, string shopAddress)
+        public Shop AddShop(string shopName, string shopAddress)
         {
             var newShop = new Shop(shopName, shopAddress);
             _shops.Add(newShop);
             return newShop;
         }
 
-        public static void RegisterProduct(string productName)
+        public void RegisterProduct(string productName)
         {
             _availableProducts.Add(productName);
         }
 
-        public static Shop FindTheBestOffer(Order order)
+        public Shop FindTheBestOffer(Order order)
         {
             Shop bestOfferShop = null;
             int minCost = int.MaxValue;
@@ -43,7 +43,7 @@ namespace Shops.Architecture
             return bestOfferShop;
         }
 
-        public static List<string> GetRegisteredProducts()
+        public List<string> GetRegisteredProducts()
         {
             return _availableProducts;
         }

@@ -7,40 +7,49 @@ namespace Shops.Tests
 {
     public class Tests
     {
+        private ShopManager _shopManager;
+
+        [SetUp]
+        public void Setup()
+        {
+            //TODO: implement
+            _shopManager = new ShopManager();
+        }
+
         [Test]
         public void AddProductsToShop_PersonCanBuyProducts()
         {
             string nameOfProduct = "T-shirt";
             int numberOfTShirts = 10;
-            int coastOfTShirts = 1700;
+            int costOfTShirts = 1700;
             int moneyOfPerson = 150000;
             int numberOfPurchasedTShirts = 5;
             
-            Shop bestShop = ShopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
+            Shop bestShop = _shopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
             var fanOfTaylorSwift = new Person("Sasha Blashenkov", moneyOfPerson);
             
-            ShopManager.RegisterProduct(nameOfProduct);
-            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, numberOfTShirts, coastOfTShirts)});
+            _shopManager.RegisterProduct(nameOfProduct);
+            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, numberOfTShirts, costOfTShirts)}, _shopManager);
             bestShop.Purchase(fanOfTaylorSwift, new List<Order>() {new Order(nameOfProduct, numberOfPurchasedTShirts)});
             
-            Assert.IsTrue(moneyOfPerson == fanOfTaylorSwift.Money + numberOfPurchasedTShirts * coastOfTShirts);
+            Assert.IsTrue(moneyOfPerson == fanOfTaylorSwift.Money + numberOfPurchasedTShirts * costOfTShirts);
             Assert.IsTrue(bestShop.GetAllProducts()[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
         }
         
         [Test]
-        public void SetAndChangeCoast()
+        public void SetAndChangeCost()
         {
             string nameOfProduct = "T-shirt";
-            int oldCoast = 1700;
+            int oldCost = 1700;
             int newCoat = 2500;
             
-            Shop bestShop = ShopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
+            Shop bestShop = _shopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
             
-            ShopManager.RegisterProduct(nameOfProduct);
-            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 10, oldCoast)});
-            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == oldCoast);
+            _shopManager.RegisterProduct(nameOfProduct);
+            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 10, oldCost)}, _shopManager);
+            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == oldCost);
             
-            bestShop.ChangeProductCoast(nameOfProduct, newCoat);
+            bestShop.ChangeProductCost(nameOfProduct, newCoat);
             Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == newCoat);
         }
         
@@ -48,23 +57,23 @@ namespace Shops.Tests
         public void FindShopWithBestOffer()
         {
             string nameOfProduct = "Milk";
-            int defaultCoast = 50;
-            int smallerCoast = 40;
-            int smallestCoast = 30;
-            int higherCoast = 60;
+            int defaultCost = 50;
+            int smallerCost = 40;
+            int smallestCost = 30;
+            int higherCost = 60;
             
-            Shop firstShop = ShopManager.AddShop("Pyaterochka", "Frunze 16");
-            Shop secondShop = ShopManager.AddShop("Dixie", "Frunze 17");
-            Shop thirdShop = ShopManager.AddShop("Crossroad", "Frunze 18");
-            Shop fourthShop = ShopManager.AddShop("Ashan", "Frunze 19");
+            Shop firstShop = _shopManager.AddShop("Pyaterochka", "Frunze 16");
+            Shop secondShop = _shopManager.AddShop("Dixie", "Frunze 17");
+            Shop thirdShop = _shopManager.AddShop("Crossroad", "Frunze 18");
+            Shop fourthShop = _shopManager.AddShop("Ashan", "Frunze 19");
             
-            ShopManager.RegisterProduct(nameOfProduct);
-            firstShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 6, defaultCoast)});
-            secondShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 5, smallerCoast)});
-            thirdShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 2, smallestCoast)}); // Smallest, but too little product
-            fourthShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 7, higherCoast)});
+            _shopManager.RegisterProduct(nameOfProduct);
+            firstShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 6, defaultCost)}, _shopManager);
+            secondShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 5, smallerCost)}, _shopManager);
+            thirdShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 2, smallestCost)}, _shopManager); // Smallest, but too little product
+            fourthShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 7, higherCost)}, _shopManager);
             
-            Assert.IsTrue(ShopManager.FindTheBestOffer(new Order(nameOfProduct, 3)).ShopId == secondShop.ShopId);
+            Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(nameOfProduct, 3)).ShopId == secondShop.ShopId);
         }
         
         [Test]
@@ -74,22 +83,22 @@ namespace Shops.Tests
             string secondProductName = "Bread";
             string thirdProductName = "Cheese";
             int defaultNumber = 5;
-            int defaultCoast = 10;
+            int defaultCost = 10;
             
-            Shop shop = ShopManager.AddShop("Dixie", "Frunze 17");
+            Shop shop = _shopManager.AddShop("Dixie", "Frunze 17");
             int oldShopMoney = shop.ShopMoney;
             int oldCustomerMoney = 100;
             var customer = new Person("Anchous", oldCustomerMoney);
             
-            ShopManager.RegisterProduct(firstProductName);
-            ShopManager.RegisterProduct(secondProductName);
-            ShopManager.RegisterProduct(thirdProductName);
+            _shopManager.RegisterProduct(firstProductName);
+            _shopManager.RegisterProduct(secondProductName);
+            _shopManager.RegisterProduct(thirdProductName);
             shop.AddProducts(new List<Product>()
             {
-                new Product(firstProductName, defaultNumber, defaultCoast),
-                new Product(secondProductName, defaultNumber, defaultCoast),
-                new Product(thirdProductName, defaultNumber, defaultCoast)
-            });
+                new Product(firstProductName, defaultNumber, defaultCost),
+                new Product(secondProductName, defaultNumber, defaultCost),
+                new Product(thirdProductName, defaultNumber, defaultCost)
+            }, _shopManager);
             
             // Not enough money
             Assert.Catch<ShopException>(() =>
@@ -117,7 +126,7 @@ namespace Shops.Tests
                 new Order(secondProductName, 3),
                 new Order(thirdProductName, 4)
             });
-            int price = defaultCoast * (2 + 3 + 4);
+            int price = defaultCost * (2 + 3 + 4);
             
             Assert.IsTrue(shop.ShopMoney == oldShopMoney + price);
             Assert.IsTrue(customer.Money == oldCustomerMoney - price);

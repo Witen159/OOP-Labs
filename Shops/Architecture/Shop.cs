@@ -24,11 +24,11 @@ namespace Shops.Architecture
         public int ShopId { get; }
         public int ShopMoney { get; private set; }
 
-        public void AddProducts(List<Product> products)
+        public void AddProducts(List<Product> products, ShopManager shopManager)
         {
             foreach (Product product in products)
             {
-                if (!ShopManager.GetRegisteredProducts().Contains(product.ProductName))
+                if (!shopManager.GetRegisteredProducts().Contains(product.ProductName))
                     throw new UnregisteredProductShopException();
 
                 bool isProductPresent = false;
@@ -81,7 +81,7 @@ namespace Shops.Architecture
             }
         }
 
-        public void ChangeProductCoast(string productName, int newCoast)
+        public void ChangeProductCost(string productName, int newCoast)
         {
             foreach (Product product in _allProducts)
             {
