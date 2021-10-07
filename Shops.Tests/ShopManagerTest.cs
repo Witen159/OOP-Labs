@@ -19,7 +19,7 @@ namespace Shops.Tests
         [Test]
         public void AddProductsToShop_PersonCanBuyProducts()
         {
-            string nameOfProduct = "T-shirt";
+            var product = new Product("T-shirt");
             int numberOfTShirts = 10;
             int costOfTShirts = 1700;
             int moneyOfPerson = 150000;
@@ -28,35 +28,35 @@ namespace Shops.Tests
             Shop bestShop = _shopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
             var fanOfTaylorSwift = new Person("Sasha Blashenkov", moneyOfPerson);
             
-            _shopManager.RegisterProduct(nameOfProduct);
-            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, numberOfTShirts, costOfTShirts)}, _shopManager);
-            bestShop.Purchase(fanOfTaylorSwift, new List<Order>() {new Order(nameOfProduct, numberOfPurchasedTShirts)});
+            _shopManager.RegisterProduct(product);
+            bestShop.AddProducts(new List<Shelf>() {new Shelf(product, numberOfTShirts, costOfTShirts)}, _shopManager);
+            bestShop.Purchase(fanOfTaylorSwift, new List<Order>() {new Order(product, numberOfPurchasedTShirts)});
             
             Assert.IsTrue(moneyOfPerson == fanOfTaylorSwift.Money + numberOfPurchasedTShirts * costOfTShirts);
-            Assert.IsTrue(bestShop.GetAllProducts()[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
+            Assert.IsTrue(bestShop.GetAllShelfs()[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
         }
         
         [Test]
         public void SetAndChangeCost()
         {
-            string nameOfProduct = "T-shirt";
+            var product = new Product("T-shirt");
             int oldCost = 1700;
-            int newCoat = 2500;
+            int newCost = 2500;
             
             Shop bestShop = _shopManager.AddShop("Taylor Swift Merch", "Primorsky Ave., 70/1");
             
-            _shopManager.RegisterProduct(nameOfProduct);
-            bestShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 10, oldCost)}, _shopManager);
-            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == oldCost);
+            _shopManager.RegisterProduct(product);
+            bestShop.AddProducts(new List<Shelf>() {new Shelf(product, 10, oldCost)}, _shopManager);
+            Assert.IsTrue(bestShop.GetAllShelfs()[0].Cost == oldCost);
             
-            bestShop.ChangeProductCost(nameOfProduct, newCoat);
-            Assert.IsTrue(bestShop.GetAllProducts()[0].Cost == newCoat);
+            bestShop.ChangeProductCost(product, newCost);
+            Assert.IsTrue(bestShop.GetAllShelfs()[0].Cost == newCost);
         }
         
         [Test]
         public void FindShopWithBestOffer()
         {
-            string nameOfProduct = "Milk";
+            var product = new Product("Milk");
             int defaultCost = 50;
             int smallerCost = 40;
             int smallestCost = 30;
@@ -67,21 +67,21 @@ namespace Shops.Tests
             Shop thirdShop = _shopManager.AddShop("Crossroad", "Frunze 18");
             Shop fourthShop = _shopManager.AddShop("Ashan", "Frunze 19");
             
-            _shopManager.RegisterProduct(nameOfProduct);
-            firstShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 6, defaultCost)}, _shopManager);
-            secondShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 5, smallerCost)}, _shopManager);
-            thirdShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 2, smallestCost)}, _shopManager); // Smallest, but too little product
-            fourthShop.AddProducts(new List<Product>() {new Product(nameOfProduct, 7, higherCost)}, _shopManager);
+            _shopManager.RegisterProduct(product);
+            firstShop.AddProducts(new List<Shelf>() {new Shelf(product, 6, defaultCost)}, _shopManager);
+            secondShop.AddProducts(new List<Shelf>() {new Shelf(product, 5, smallerCost)}, _shopManager);
+            thirdShop.AddProducts(new List<Shelf>() {new Shelf(product, 2, smallestCost)}, _shopManager); // Smallest, but too little product
+            fourthShop.AddProducts(new List<Shelf>() {new Shelf(product, 7, higherCost)}, _shopManager);
             
-            Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(nameOfProduct, 3)).ShopId == secondShop.ShopId);
+            Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(product, 3)).ShopId == secondShop.ShopId);
         }
         
         [Test]
         public void PurchaseBatchOfProducts()
         {
-            string firstProductName = "Milk";
-            string secondProductName = "Bread";
-            string thirdProductName = "Cheese";
+            var firstProduct = new Product("Milk");
+            var secondProduct = new Product("Bread");
+            var thirdProduct = new Product("Cheese");
             int defaultNumber = 5;
             int defaultCost = 10;
             
@@ -90,14 +90,14 @@ namespace Shops.Tests
             int oldCustomerMoney = 100;
             var customer = new Person("Anchous", oldCustomerMoney);
             
-            _shopManager.RegisterProduct(firstProductName);
-            _shopManager.RegisterProduct(secondProductName);
-            _shopManager.RegisterProduct(thirdProductName);
-            shop.AddProducts(new List<Product>()
+            _shopManager.RegisterProduct(firstProduct);
+            _shopManager.RegisterProduct(secondProduct);
+            _shopManager.RegisterProduct(thirdProduct);
+            shop.AddProducts(new List<Shelf>()
             {
-                new Product(firstProductName, defaultNumber, defaultCost),
-                new Product(secondProductName, defaultNumber, defaultCost),
-                new Product(thirdProductName, defaultNumber, defaultCost)
+                new Shelf(firstProduct, defaultNumber, defaultCost),
+                new Shelf(secondProduct, defaultNumber, defaultCost),
+                new Shelf(thirdProduct, defaultNumber, defaultCost)
             }, _shopManager);
             
             // Not enough money
@@ -105,9 +105,9 @@ namespace Shops.Tests
             {
                 shop.Purchase(customer, new List<Order>()
                 {
-                    new Order(firstProductName, defaultNumber),
-                    new Order(secondProductName, defaultNumber),
-                    new Order(thirdProductName, defaultNumber)
+                    new Order(firstProduct, defaultNumber),
+                    new Order(secondProduct, defaultNumber),
+                    new Order(thirdProduct, defaultNumber)
                 });
             });
             
@@ -116,15 +116,15 @@ namespace Shops.Tests
             {
                 shop.Purchase(customer, new List<Order>()
                 {
-                    new Order(firstProductName, defaultNumber + 1)
+                    new Order(firstProduct, defaultNumber + 1)
                 });
             });
             
             shop.Purchase(customer, new List<Order>()
             {
-                new Order(firstProductName, 2),
-                new Order(secondProductName, 3),
-                new Order(thirdProductName, 4)
+                new Order(firstProduct, 2),
+                new Order(secondProduct, 3),
+                new Order(thirdProduct, 4)
             });
             int price = defaultCost * (2 + 3 + 4);
             
@@ -134,7 +134,7 @@ namespace Shops.Tests
             var newNumberOfProducts = new List<int>();
             for (int i = 0; i < 3; i++)
             {
-                newNumberOfProducts.Add(shop.GetAllProducts()[i].NumberOfProducts);
+                newNumberOfProducts.Add(shop.GetAllShelfs()[i].NumberOfProducts);
             }
             Assert.IsTrue(newNumberOfProducts[0] == defaultNumber - 2 
                           && newNumberOfProducts[1] == defaultNumber - 3 

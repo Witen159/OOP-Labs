@@ -2,13 +2,13 @@
 {
     public class Order
     {
-        public Order(string productName, int numberOfProduct)
+        public Order(Product product, int numberOfProduct)
         {
-            ProductName = productName;
+            Product = product;
             NumberOfProduct = numberOfProduct;
         }
 
-        public string ProductName { get; }
+        public Product Product { get; }
         public int NumberOfProduct { get; }
     }
 }

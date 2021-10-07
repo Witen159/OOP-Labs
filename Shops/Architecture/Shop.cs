@@ -8,7 +8,7 @@ namespace Shops.Architecture
     public class Shop
     {
         private static int _currentShopId = 1;
-        private List<Product> _allProducts;
+        private List<Shelf> _allShelfs;
         public Shop(string shopName, string address)
         {
             ShopName = shopName;
@@ -16,7 +16,7 @@ namespace Shops.Architecture
             ShopId = _currentShopId;
             _currentShopId++;
             ShopMoney = 100000;
-            _allProducts = new List<Product>();
+            _allShelfs = new List<Shelf>();
         }
 
         public string ShopName { get; }
@@ -24,43 +24,43 @@ namespace Shops.Architecture
         public int ShopId { get; }
         public int ShopMoney { get; private set; }
 
-        public void AddProducts(List<Product> products, ShopManager shopManager)
+        public void AddProducts(List<Shelf> shelfs, ShopManager shopManager)
         {
-            foreach (Product product in products)
+            foreach (Shelf shelf in shelfs)
             {
-                if (!shopManager.GetRegisteredProducts().Contains(product.ProductName))
+                if (!shopManager.GetRegisteredProducts().Contains(shelf.ProductInShelf))
                     throw new UnregisteredProductShopException();
 
                 bool isProductPresent = false;
-                foreach (Product shopsProduct in _allProducts)
+                foreach (Shelf shopsShelf in _allShelfs)
                 {
-                    if (product.ProductName == shopsProduct.ProductName)
+                    if (shelf.ProductInShelf.ProductName == shopsShelf.ProductInShelf.ProductName)
                     {
                         isProductPresent = true;
-                        shopsProduct.NumberOfProducts += product.NumberOfProducts;
+                        shopsShelf.NumberOfProducts += shelf.NumberOfProducts;
                     }
                 }
 
                 if (!isProductPresent)
-                    _allProducts.Add(product);
+                    _allShelfs.Add(shelf);
             }
         }
 
         public void Purchase(Person customer, List<Order> orders)
         {
             int price = 0;
-            var changedProducts = new List<Product>();
+            var changedShelfs = new List<Shelf>();
             foreach (Order currentOrder in orders)
             {
                 bool isPurchaseCompleted = false;
-                foreach (Product product in _allProducts)
+                foreach (Shelf shelf in _allShelfs)
                 {
-                    if (product.ProductName == currentOrder.ProductName)
+                    if (shelf.ProductInShelf.ProductName == currentOrder.Product.ProductName)
                     {
-                        if (product.NumberOfProducts < currentOrder.NumberOfProduct)
+                        if (shelf.NumberOfProducts < currentOrder.NumberOfProduct)
                             throw new InvalidPurchaseShopException();
-                        price += currentOrder.NumberOfProduct * product.Cost;
-                        changedProducts.Add(product);
+                        price += currentOrder.NumberOfProduct * shelf.Cost;
+                        changedShelfs.Add(shelf);
                         isPurchaseCompleted = true;
                         break;
                     }
@@ -77,22 +77,22 @@ namespace Shops.Architecture
 
             for (int i = 0; i < orders.Count; i++)
             {
-                changedProducts[i].NumberOfProducts -= orders[i].NumberOfProduct;
+                changedShelfs[i].NumberOfProducts -= orders[i].NumberOfProduct;
             }
         }
 
-        public void ChangeProductCost(string productName, int newCoast)
+        public void ChangeProductCost(Product product, int newCoast)
         {
-            foreach (Product product in _allProducts)
+            foreach (Shelf shelf in _allShelfs)
             {
-                if (product.ProductName == productName)
-                    product.Cost = newCoast;
+                if (shelf.ProductInShelf.ProductName == product.ProductName)
+                    shelf.Cost = newCoast;
             }
         }
 
-        public List<Product> GetAllProducts()
+        public List<Shelf> GetAllShelfs()
         {
-            return _allProducts;
+            return _allShelfs;
         }
     }
 }

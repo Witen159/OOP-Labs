@@ -4,7 +4,7 @@ namespace Shops.Architecture
 {
     public class ShopManager
     {
-        private List<string> _availableProducts = new List<string>();
+        private List<Product> _availableProducts = new List<Product>();
         private List<Shop> _shops = new List<Shop>();
 
         public Shop AddShop(string shopName, string shopAddress)
@@ -14,9 +14,9 @@ namespace Shops.Architecture
             return newShop;
         }
 
-        public void RegisterProduct(string productName)
+        public void RegisterProduct(Product product)
         {
-            _availableProducts.Add(productName);
+            _availableProducts.Add(product);
         }
 
         public Shop FindTheBestOffer(Order order)
@@ -25,14 +25,14 @@ namespace Shops.Architecture
             int minCost = int.MaxValue;
             foreach (Shop currentShop in _shops)
             {
-                foreach (Product currentProduct in currentShop.GetAllProducts())
+                foreach (Shelf currentShelf in currentShop.GetAllShelfs())
                 {
-                    if (currentProduct.ProductName == order.ProductName)
+                    if (currentShelf.ProductInShelf.ProductName == order.Product.ProductName)
                     {
-                        if (currentProduct.Cost < minCost && currentProduct.NumberOfProducts >= order.NumberOfProduct)
+                        if (currentShelf.Cost < minCost && currentShelf.NumberOfProducts >= order.NumberOfProduct)
                         {
                             bestOfferShop = currentShop;
-                            minCost = currentProduct.Cost;
+                            minCost = currentShelf.Cost;
                         }
 
                         break;
@@ -43,7 +43,7 @@ namespace Shops.Architecture
             return bestOfferShop;
         }
 
-        public List<string> GetRegisteredProducts()
+        public List<Product> GetRegisteredProducts()
         {
             return _availableProducts;
         }
