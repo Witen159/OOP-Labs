@@ -27,7 +27,7 @@ namespace Shops.Manager
             int minCost = int.MaxValue;
             foreach (Shop currentShop in _shops)
             {
-                foreach (Shelf currentShelf in currentShop.AllReadOnlyShelfs)
+                foreach (Shelf currentShelf in currentShop.AllShelfs)
                 {
                     if (currentShelf.ProductInShelf == order.Product)
                     {

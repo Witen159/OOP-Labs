@@ -34,7 +34,7 @@ namespace Shops.Tests
             bestShop.Purchase(fanOfTaylorSwift, new List<Order>() {new Order(product, numberOfPurchasedTShirts)});
             
             Assert.IsTrue(moneyOfPerson == fanOfTaylorSwift.Money + numberOfPurchasedTShirts * costOfTShirts);
-            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
+            Assert.IsTrue(bestShop.AllShelfs[0].NumberOfProducts == numberOfTShirts - numberOfPurchasedTShirts);
         }
         
         [Test]
@@ -48,10 +48,10 @@ namespace Shops.Tests
             
             _shopManager.RegisterProduct(product);
             _shopManager.AddProductsToShop(bestShop, new List<Shelf>() {new Shelf(product, 10, oldCost)});
-            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].Cost == oldCost);
+            Assert.IsTrue(bestShop.AllShelfs[0].Cost == oldCost);
             
             bestShop.ChangeProductCost(product, newCost);
-            Assert.IsTrue(bestShop.AllReadOnlyShelfs[0].Cost == newCost);
+            Assert.IsTrue(bestShop.AllShelfs[0].Cost == newCost);
         }
         
         [Test]
@@ -74,7 +74,7 @@ namespace Shops.Tests
             _shopManager.AddProductsToShop(thirdShop, new List<Shelf>() {new Shelf(product, 2, smallestCost)}); // Smallest, but too little product
             _shopManager.AddProductsToShop(fourthShop, new List<Shelf>() {new Shelf(product, 7, higherCost)});
             
-            Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(product, 3)).ShopId == secondShop.ShopId);
+            Assert.IsTrue(_shopManager.FindTheBestOffer(new Order(product, 3)).Id == secondShop.Id);
         }
         
         [Test]
@@ -87,7 +87,7 @@ namespace Shops.Tests
             int defaultCost = 10;
             
             Shop shop = _shopManager.AddShop("Dixie", "Frunze 17");
-            int oldShopMoney = shop.ShopMoney;
+            int oldShopMoney = shop.Money;
             int oldCustomerMoney = 100;
             var customer = new Person("Anchous", oldCustomerMoney);
             
@@ -129,13 +129,13 @@ namespace Shops.Tests
             });
             int price = defaultCost * (2 + 3 + 4);
             
-            Assert.IsTrue(shop.ShopMoney == oldShopMoney + price);
+            Assert.IsTrue(shop.Money == oldShopMoney + price);
             Assert.IsTrue(customer.Money == oldCustomerMoney - price);
 
             var newNumberOfProducts = new List<int>();
             for (int i = 0; i < 3; i++)
             {
-                newNumberOfProducts.Add(shop.AllReadOnlyShelfs[i].NumberOfProducts);
+                newNumberOfProducts.Add(shop.AllShelfs[i].NumberOfProducts);
             }
             Assert.IsTrue(newNumberOfProducts[0] == defaultNumber - 2 
                           && newNumberOfProducts[1] == defaultNumber - 3 

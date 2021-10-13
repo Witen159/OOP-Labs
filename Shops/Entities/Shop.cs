@@ -7,22 +7,21 @@ namespace Shops.Entities
     {
         private static int _currentShopId = 1;
         private List<Shelf> _allShelfs;
-        public Shop(string shopName, string address)
+        public Shop(string name, string address)
         {
-            ShopName = shopName;
+            Name = name;
             Address = address;
-            ShopId = _currentShopId;
+            Id = _currentShopId;
             _currentShopId++;
-            ShopMoney = 100000;
+            Money = 100000;
             _allShelfs = new List<Shelf>();
-            AllReadOnlyShelfs = _allShelfs.AsReadOnly();
         }
 
-        public string ShopName { get; }
+        public string Name { get; }
         public string Address { get; }
-        public int ShopId { get; }
-        public int ShopMoney { get; private set; }
-        public IReadOnlyList<Shelf> AllReadOnlyShelfs { get; }
+        public int Id { get; }
+        public int Money { get; private set; }
+        public IReadOnlyList<Shelf> AllShelfs => _allShelfs;
 
         public void AddProducts(List<Shelf> shelfs)
         {
@@ -69,7 +68,7 @@ namespace Shops.Entities
 
             if (price > customer.Money)
                 throw new InvalidPurchaseShopException();
-            ShopMoney += price;
+            Money += price;
             customer.Pay(price);
 
             for (int i = 0; i < orders.Count; i++)
