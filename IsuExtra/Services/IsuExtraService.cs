@@ -9,7 +9,7 @@ namespace IsuExtra.Services
         {
         }
 
-        public void EnrollStudentToOgnp(Student student)
+        public void EnrollStudentToOgnp(Student student, Ognp ognp)
         {
         }
 
