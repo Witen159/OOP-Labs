@@ -7,9 +7,9 @@ namespace IsuExtra.Services
         public StudentWithOgnp(string name)
             : base(name)
         {
-            StudentsOgnp = null;
+            StudentsFlow = null;
         }
 
-        public Ognp StudentsOgnp { get; set; }
+        public Flow StudentsFlow { get; set; }
     }
 }
