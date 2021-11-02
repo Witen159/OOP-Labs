@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Isu.Services;
 using Isu.Tools;
-using IsuExtra.Tools;
 
 namespace IsuExtra.Services
 {
@@ -9,35 +8,35 @@ namespace IsuExtra.Services
     {
         private const int MaxNumberOfStudents = 30;
         private int _numberOfStudents;
-        private List<StudentWithOgnp> _allStudents;
-        public Flow(string flowName)
+        private List<Student> _allStudents;
+        private List<Couple> _shedule;
+        public Flow(string flowName, List<Couple> schedule)
         {
             _numberOfStudents = 0;
             Name = flowName;
-            _allStudents = new List<StudentWithOgnp>();
+            _allStudents = new List<Student>();
+            _shedule = schedule;
         }
 
         public string Name { get; }
         public Ognp FlowsOgnp { get; set; }
-        public IReadOnlyList<StudentWithOgnp> AllStudents => _allStudents;
+        public IReadOnlyList<Couple> Schedule => _shedule;
+        public IReadOnlyList<Student> AllStudents => _allStudents;
 
-        public void AddStudent(StudentWithOgnp student)
+        public void AddStudent(Student student)
         {
             if (_numberOfStudents >= MaxNumberOfStudents)
                 throw new ExceededMaxNumberOfStudentIsuException();
-            student.StudentsFlow = this;
             _numberOfStudents++;
             _allStudents.Add(student);
         }
 
-        public void RemoveStudent(StudentWithOgnp removedStudent)
+        public void RemoveStudent(Student removedStudent)
         {
             if (!_allStudents.Remove(removedStudent))
             {
-                throw new NoStudentInFlowIsuException();
+                throw new IsuException("No such student in flow");
             }
-
-            removedStudent.StudentsFlow = null;
         }
 
         public bool IsFull()
