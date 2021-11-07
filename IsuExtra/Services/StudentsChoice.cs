@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Isu.Services;
 using Isu.Tools;
 
@@ -46,16 +47,10 @@ namespace IsuExtra.Services
 
         private bool CheckIntersectionOfSchedules(Flow flow)
         {
-            foreach (Couple flowCouple in flow.Schedule)
-            {
-                foreach (Couple studentsCouple in _shedule)
-                {
-                    if (Equals(flowCouple, studentsCouple))
-                        return true;
-                }
-            }
-
-            return false;
+            return (from flowCouple in flow.Schedule
+                from studentsCouple in _shedule
+                where Equals(flowCouple, studentsCouple)
+                select flowCouple).Any();
         }
     }
 }

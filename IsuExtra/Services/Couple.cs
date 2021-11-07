@@ -1,4 +1,5 @@
-﻿using Isu.Services;
+﻿using System;
+using Isu.Services;
 using Isu.Tools;
 
 namespace IsuExtra.Services
@@ -28,7 +29,7 @@ namespace IsuExtra.Services
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Teacher, Auditorium, CoupleTime);
         }
     }
 }

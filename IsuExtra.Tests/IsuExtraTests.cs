@@ -32,8 +32,8 @@ namespace IsuExtra.Tests
                 { new Couple(new CoupleTime(3, 4), "Suslina", 201) });
 
             _isuExtraService.EnrollStudentToFlow(student, normalFlow);
-            Assert.IsTrue(normalFlow.AllStudents[0].Id == student.Id);
-            Assert.IsTrue(_isuExtraService.GetStudentsChoice(student).Flows[0].Name == normalFlow.Name);
+            Assert.AreEqual(normalFlow.AllStudents[0].Id, student.Id);
+            Assert.AreEqual(_isuExtraService.GetStudentsChoice(student).Flows[0].Name, normalFlow.Name);
 
             // Same couples
             Flow sameCoupleFlow = _isuExtraService.AddNewFlow(anotherOgnp, "1/2", new List<Couple>() 
@@ -84,8 +84,8 @@ namespace IsuExtra.Tests
             _isuExtraService.EnrollStudentToFlow(student, flow);
             _isuExtraService.RemoveStudentFromFlow(student, flow);
             
-            Assert.IsTrue(flow.AllStudents.Count == 0);
-            Assert.IsTrue(_isuExtraService.GetStudentsChoice(student).Flows.Count == 0);
+            Assert.Zero(flow.AllStudents.Count);
+            Assert.Zero(_isuExtraService.GetStudentsChoice(student).Flows.Count);
         }
 
         [Test]
@@ -97,7 +97,8 @@ namespace IsuExtra.Tests
             Flow secondFlow = _isuExtraService.AddNewFlow(ognp, "1/2", new List<Couple>() 
                 { new Couple(new CoupleTime(1, 2), "Suslina", 201) });
             List<Flow> ognpsFlows = _isuExtraService.GetOgnpsFlows(ognp);
-            Assert.IsTrue(ognpsFlows[0].Name == firstFlow.Name && ognpsFlows[1].Name == secondFlow.Name);
+            Assert.AreEqual(ognpsFlows[0].Name, firstFlow.Name);
+            Assert.AreEqual(ognpsFlows[1].Name, secondFlow.Name);
         }
 
         [Test]
@@ -118,7 +119,8 @@ namespace IsuExtra.Tests
             _isuExtraService.EnrollStudentToFlow(secondStudent, flow);
             
             List<Student> students = _isuExtraService.GetFlowsStudents(flow);
-            Assert.IsTrue(students[0].Id == firstStudent.Id && students[1].Id == secondStudent.Id);
+            Assert.AreEqual(students[0].Id, firstStudent.Id);
+            Assert.AreEqual(students[1].Id, secondStudent.Id);
         }
 
         [Test]
@@ -137,8 +139,8 @@ namespace IsuExtra.Tests
             
             _isuExtraService.EnrollStudentToFlow(firstStudent, flow);
             List<Student> notEnrolledStudents = _isuExtraService.GetNotEnrolledStudents(group);
-            Assert.IsTrue(notEnrolledStudents.Count == 1);
-            Assert.IsTrue(notEnrolledStudents[0].Id == secondStudent.Id);
+            Assert.AreEqual(notEnrolledStudents[0].Id, secondStudent.Id);
+            Assert.AreEqual(notEnrolledStudents.Count, 1);
         }
     }
 }

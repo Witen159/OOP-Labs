@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Isu.Services;
 using Isu.Tools;
 
@@ -80,24 +81,15 @@ namespace IsuExtra.Services
 
         public StudentsChoice GetStudentsChoice(Student student)
         {
-            foreach (StudentsChoice studentsChoice in _studentsChoises)
-            {
-                if (studentsChoice.Student.Id == student.Id)
-                    return studentsChoice;
-            }
-
-            return null;
+            return _studentsChoises.FirstOrDefault(studentsChoice => studentsChoice.Student.Id == student.Id);
         }
 
         public List<Couple> GetStudentsShedule(Student student)
         {
             Group studentsGroup = student.StudentsGroup;
-            foreach (Timetable timetable in _timetables)
+            foreach (Timetable timetable in _timetables.Where(timetable => timetable.Group.GroupName == studentsGroup.GroupName))
             {
-                if (timetable.Group.GroupName == studentsGroup.GroupName)
-                {
-                    return timetable.Shedule as List<Couple>;
-                }
+                return timetable.Shedule.ToList();
             }
 
             throw new IsuException("The student's group does not have a schedule set");

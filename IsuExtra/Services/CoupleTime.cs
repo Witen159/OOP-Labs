@@ -1,4 +1,5 @@
-﻿using Isu.Tools;
+﻿using System;
+using Isu.Tools;
 
 namespace IsuExtra.Services
 {
@@ -10,11 +11,12 @@ namespace IsuExtra.Services
                 throw new IsuException("Selected day outside the schedule");
             if (numberOfCouple is < 0 or > 7)
                 throw new IsuException("Selected Couple outside the schedule");
-            Day = day;
+            Day = default(DateTime);
+            Day.AddDays(day);
             NumberOfCouple = numberOfCouple;
         }
 
-        public int Day { get; }
+        public DateTime Day { get; }
         public int NumberOfCouple { get; }
 
         public override bool Equals(object obj)
@@ -29,7 +31,7 @@ namespace IsuExtra.Services
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Day, NumberOfCouple);
         }
     }
 }
