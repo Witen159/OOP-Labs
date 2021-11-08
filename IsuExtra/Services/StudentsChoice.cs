@@ -47,7 +47,7 @@ namespace IsuExtra.Services
 
         private bool CheckIntersectionOfSchedules(Flow flow)
         {
-            return (from flowCouple in flow.Schedule from studentsCouple in _shedule where Equals(flowCouple, studentsCouple) select flowCouple).Any();
+            return flow.Schedule.Any(flowCouple => Enumerable.Contains(_shedule, flowCouple));
         }
     }
 }
