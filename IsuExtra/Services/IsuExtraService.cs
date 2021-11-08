@@ -86,13 +86,10 @@ namespace IsuExtra.Services
 
         public List<Couple> GetStudentsShedule(Student student)
         {
-            Group studentsGroup = student.StudentsGroup;
-            foreach (Timetable timetable in _timetables.Where(timetable => timetable.Group.GroupName == studentsGroup.GroupName))
-            {
-                return timetable.Shedule.ToList();
-            }
-
-            throw new IsuException("The student's group does not have a schedule set");
+            var shedule = _timetables.FirstOrDefault(timetable => timetable.Group.GroupName == student.StudentsGroup.GroupName)?.Shedule.ToList();
+            if (shedule == null)
+                throw new IsuException("The student's group does not have a schedule set");
+            return shedule;
         }
     }
 }
