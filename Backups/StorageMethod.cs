@@ -2,7 +2,14 @@
 {
     public enum StorageMethod
     {
+        /// <summary>
+        /// Single storage method.
+        /// </summary>
         Single,
-        Split
+
+        /// <summary>
+        /// Split storage method.
+        /// </summary>
+        Split,
     }
 }
