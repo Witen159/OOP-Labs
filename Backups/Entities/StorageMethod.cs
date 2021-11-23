@@ -1,4 +1,4 @@
-﻿namespace Backups
+﻿namespace Backups.Entities
 {
     public enum StorageMethod
     {

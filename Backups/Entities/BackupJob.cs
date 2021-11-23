@@ -1,8 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
-namespace Backups
+namespace Backups.Entities
 {
     public class BackupJob
     {

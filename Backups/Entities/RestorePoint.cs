@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-namespace Backups
+namespace Backups.Entities
 {
     public class RestorePoint
     {
