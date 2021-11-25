@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Backups.Interfaces;
 
 namespace Backups.Entities
 {
@@ -8,9 +9,8 @@ namespace Backups.Entities
         private int _counter = 1;
         private DirectoryInfo _directory;
         private DirectoryInfo _jobDirectory;
-        private StorageMethod _storageMethod;
         private string _directoryPath;
-        public BackupJob(string rootPath, string repositoryName, StorageMethod storageMethod)
+        public BackupJob(string rootPath, string repositoryName)
         {
             _directoryPath = $@"{rootPath}\{repositoryName}";
             _directory = new DirectoryInfo(_directoryPath);
@@ -19,12 +19,11 @@ namespace Backups.Entities
             _jobDirectory = new DirectoryInfo($@"{_directoryPath}\Job objects");
             if (!_jobDirectory.Exists)
                 _jobDirectory.Create();
-            _storageMethod = storageMethod;
         }
 
-        public RestorePoint CreateRestorePoint()
+        public RestorePoint CreateRestorePoint(ISaveLocal localSave, ISaveVirtual virtualSave, string directoryPath, string pointName, StorageType type)
         {
-            var restorePoint = new RestorePoint(_storageMethod, _counter, _directoryPath);
+            var restorePoint = new RestorePoint(pointName, type, _counter, directoryPath, localSave, virtualSave);
             _counter++;
             return restorePoint;
         }
