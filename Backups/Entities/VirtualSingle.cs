@@ -1,12 +1,13 @@
-﻿using Backups.Interfaces;
+﻿using System.Collections.Generic;
+using Backups.Interfaces;
 
 namespace Backups.Entities
 {
     public class VirtualSingle : ISaveVirtual
     {
-        public void Save()
+        public List<List<MyFile>> Save(List<MyFile> files)
         {
-            throw new System.NotImplementedException();
+            return new List<List<MyFile>> { files };
         }
     }
 }

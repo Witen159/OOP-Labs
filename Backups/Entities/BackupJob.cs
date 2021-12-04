@@ -21,9 +21,9 @@ namespace Backups.Entities
                 _jobDirectory.Create();
         }
 
-        public RestorePoint CreateRestorePoint(ISaveLocal localSave, ISaveVirtual virtualSave, string directoryPath, string pointName, StorageType type)
+        public RestorePoint CreateRestorePoint(ISaveLocal localSave, ISaveVirtual virtualSave, string pointName, StorageType type)
         {
-            var restorePoint = new RestorePoint(pointName, type, _counter, directoryPath, localSave, virtualSave);
+            var restorePoint = new RestorePoint(pointName, type, _counter, _directoryPath, localSave, virtualSave);
             _counter++;
             return restorePoint;
         }
