@@ -8,7 +8,15 @@ namespace Backups.Entities
     {
         public void Save(ISaver saver, List<FileInfo> files, RestorePoint restorePoint, FileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            var repositories = new List<Repository>();
+            foreach (FileInfo file in files)
+            {
+                var repository = new Repository();
+                repository.AddStorages(new List<FileInfo>() { file });
+                repositories.Add(repository);
+            }
+
+            saver.Save(repositories, restorePoint, fileSystem);
         }
     }
 }

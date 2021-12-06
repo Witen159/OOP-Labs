@@ -6,9 +6,12 @@ namespace Backups.Entities
 {
     public class Single : IMethod
     {
-        public void Save(ISaver saver, List<FileInfo> files, RestorePoint restorePoin, FileSystem fileSystemt)
+        public void Save(ISaver saver, List<FileInfo> files, RestorePoint restorePoint, FileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            var repository = new Repository();
+            repository.AddStorages(files);
+
+            saver.Save(new List<Repository>() { repository }, restorePoint, fileSystem);
         }
     }
 }
