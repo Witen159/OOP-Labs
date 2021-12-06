@@ -1,21 +1,30 @@
-﻿using System;
-using System.IO;
-using System.IO.Compression;
-using Backups.Interfaces;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Backups.Entities
 {
     public class RestorePoint
     {
-        public RestorePoint(string pointName, StorageType type, int id, string directoryPath, ISaveLocal localSave, ISaveVirtual virtualSave)
+        private static int _currentId = 1;
+
+        private List<Repository> _repositories;
+
+        public RestorePoint(string restorePointPath)
         {
-            Id = id;
-            DirectoryPath = directoryPath;
-            PointName = pointName;
+            Id = _currentId;
+            _currentId++;
+            Path = restorePointPath;
+            _repositories = new List<Repository>();
         }
 
         public int Id { get; }
-        public string DirectoryPath { get; }
-        public string PointName { get; }
+        public string Path { get; }
+
+        public IReadOnlyList<Repository> Repositories => _repositories;
+
+        public void AddRepository(Repository repository)
+        {
+            _repositories.Add(repository);
+        }
     }
 }
