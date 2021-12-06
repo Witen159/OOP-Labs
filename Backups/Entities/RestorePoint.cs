@@ -12,17 +12,6 @@ namespace Backups.Entities
             Id = id;
             DirectoryPath = directoryPath;
             PointName = pointName;
-            switch (type)
-            {
-                case StorageType.Local:
-                    localSave.Save(DirectoryPath, PointName, Id);
-                    break;
-                case StorageType.Virtual:
-                    virtualSave.Save();
-                    break;
-                default:
-                    throw new Exception("The storage method is not specified.");
-            }
         }
 
         public int Id { get; }
