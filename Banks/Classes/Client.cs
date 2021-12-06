@@ -10,7 +10,7 @@ namespace Banks.Classes
             Surname = surname;
             Address = address;
             PassportNumber = passportNumber;
-            Doubtful = DoubtfulCheck();
+            DoubtfulCheck();
         }
 
         public string Name { get; }
@@ -24,7 +24,7 @@ namespace Banks.Classes
             if (Address != null)
                 throw new Exception("Address already added");
             Address = address;
-            Doubtful = DoubtfulCheck();
+            DoubtfulCheck();
         }
 
         public void SetPassport(int passportNumber)
@@ -32,12 +32,12 @@ namespace Banks.Classes
             if (PassportNumber != 0)
                 throw new Exception("Passport number already added");
             PassportNumber = passportNumber;
-            Doubtful = DoubtfulCheck();
+            DoubtfulCheck();
         }
 
-        private bool DoubtfulCheck()
+        private void DoubtfulCheck()
         {
-            return Address == null || PassportNumber == 0;
+            Doubtful = Address == null || PassportNumber == 0;
         }
     }
 }
