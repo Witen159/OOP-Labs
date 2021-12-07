@@ -5,23 +5,21 @@ namespace Backups.Entities
 {
     public class FileSystem
     {
-        private List<DirectoryInfo> _restorePointDirectories;
+        private List<DirectoryInfo> _pointDirectories;
 
-        public FileSystem(string rootPath)
+        public FileSystem()
         {
-            RootPath = rootPath;
-            _restorePointDirectories = new List<DirectoryInfo>();
+            _pointDirectories = new List<DirectoryInfo>();
         }
 
-        public string RootPath { get; }
-        public IReadOnlyList<DirectoryInfo> RestorePointDirectories => _restorePointDirectories;
+        public IReadOnlyList<DirectoryInfo> PointDirectories => _pointDirectories;
 
         public DirectoryInfo AddRestorePointDirectory(string restorePointPath)
         {
             var directory = new DirectoryInfo(restorePointPath);
             if (!directory.Exists)
                 directory.Create();
-            _restorePointDirectories.Add(directory);
+            _pointDirectories.Add(directory);
             return directory;
         }
     }

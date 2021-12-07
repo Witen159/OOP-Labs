@@ -9,16 +9,20 @@ namespace Backups.Entities
 
         private List<Repository> _repositories;
 
-        public RestorePoint(string restorePointPath)
+        public RestorePoint(string restorePointName, string restorePointDirectoryPath)
         {
             Id = _currentId;
             _currentId++;
-            Path = restorePointPath;
+            Name = restorePointName;
+            DirectoryPath = restorePointDirectoryPath;
             _repositories = new List<Repository>();
+            PointDirectoryPath = $@"{DirectoryPath}\{Name} {Id}";
         }
 
         public int Id { get; }
-        public string Path { get; }
+        public string DirectoryPath { get; }
+        public string PointDirectoryPath { get; }
+        public string Name { get; }
 
         public IReadOnlyList<Repository> Repositories => _repositories;
 

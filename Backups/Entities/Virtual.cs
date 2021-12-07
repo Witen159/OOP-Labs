@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Backups.Interfaces;
 
 namespace Backups.Entities
@@ -7,7 +8,10 @@ namespace Backups.Entities
     {
         public void Save(List<Repository> repositories, RestorePoint restorePoint, FileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            foreach (Repository repository in repositories)
+            {
+                restorePoint.AddRepository(repository);
+            }
         }
     }
 }

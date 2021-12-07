@@ -1,66 +1,56 @@
 ﻿using System.IO;
+using Backups.Entities;
+using Backups.Interfaces;
 using NUnit.Framework;
 
 namespace Backups.Tests
 {
     public class BackupsTests
     {
-        // Local Tests
-        
-        // [Test]
-        // public void Split()
-        // {
-        //     const string rootPath = @"C:\Users\User\source\repos\Programming_1\Witen159\Backups";
-        //     const string directoryName = "TestDir";
-        //     var backupJob = new BackupJob(rootPath, directoryName, StorageMethod.Split);
-        //     
-        //     const string addPath = @"C:\Users\User\source\repos\Programming_1\Witen159\Backups\FilesToAdd";
-        //     backupJob.AddObject($@"{addPath}\test1.txt");
-        //     backupJob.AddObject($@"{addPath}\test2.txt");
-        //     
-        //     backupJob.CreateRestorePoint();
-        //     backupJob.DeleteObject("test2.txt");
-        //     backupJob.CreateRestorePoint();
-        //
-        //     string directoryPath = $@"{rootPath}\{directoryName}";
-        //     
-        //     // Checking the existence of Restore Points.
-        //     Assert.IsTrue(new DirectoryInfo($@"{directoryPath}\Restore Point 1").Exists);
-        //     Assert.IsTrue(new DirectoryInfo($@"{directoryPath}\Restore Point 2").Exists);
-        //     
-        //     // Checking the existence of first and second storage.
-        //     Assert.IsTrue(new FileInfo($@"{directoryPath}\Restore Point 1\File_test1_1.zip").Exists);
-        //     Assert.IsTrue(new FileInfo($@"{directoryPath}\Restore Point 1\File_test2_1.zip").Exists);
-        //     
-        //     // Checking the existence of third and absence of fourth storage.
-        //     Assert.IsTrue(new FileInfo($@"{directoryPath}\Restore Point 2\File_test1_2.zip").Exists);
-        //     Assert.IsFalse(new FileInfo($@"{directoryPath}\Restore Point 2\File_test2_2.zip").Exists);
-        //     
-        //     Directory.Delete(directoryPath, true);
-        // }
+        private ISaver localSaver = new Local();
+        private ISaver virtualSaver = new Virtual();
+        private FileSystem fileSystem = new FileSystem();
+        private IMethod single = new Single();
+        private IMethod split = new Split();
+        private string dir = @"C:\Users\User\source\repos\backupTests";
 
-        // [Test]
-        // public void Single()
-        // {
-        //     const string rootPath = @"C:\Users\User\source\repos\Programming_1\Witen159\Backups";
-        //     const string directoryName = "TestDir";
-        //     var backupJob = new BackupJob(rootPath, directoryName, StorageMethod.Single);
-        //     
-        //     const string addPath = @"C:\Users\User\source\repos\Programming_1\Witen159\Backups\FilesToAdd";
-        //     backupJob.AddObject($@"{addPath}\test1.txt");
-        //     backupJob.AddObject($@"{addPath}\test2.txt");
-        //     
-        //     backupJob.CreateRestorePoint();
-        //     
-        //     string directoryPath = $@"{rootPath}\{directoryName}";
-        //     
-        //     // Checking the existence of Restore Point.
-        //     Assert.IsTrue(new DirectoryInfo($@"{directoryPath}\Restore Point 1").Exists);
-        //     
-        //     // Checking the existence of storage.
-        //     Assert.IsTrue(new FileInfo($@"{directoryPath}\Restore Point 1\Files_1.zip").Exists);
-        //     
-        //     Directory.Delete(directoryPath, true);
-        // }
+        [Test]
+        public void SingleVirtualTest()
+        {
+            var singleBackupJop = new BackupJob(single, fileSystem);
+
+            FileInfo file1 = singleBackupJop.AddObject(@"C:\Users\User\source\repos\FilesToAdd\test1.txt");
+            FileInfo file2 = singleBackupJop.AddObject(@"C:\Users\User\source\repos\FilesToAdd\test2.txt");
+
+            RestorePoint restorePoint1 = singleBackupJop.CreateRestorePoint(virtualSaver, "Restore Point", dir);
+            singleBackupJop.DeleteObject(file2);
+            RestorePoint restorePoint2 = singleBackupJop.CreateRestorePoint(virtualSaver, "Restore Point", dir);
+            
+            Assert.AreEqual(restorePoint1.Repositories.Count, 1);
+            Assert.AreEqual(restorePoint2.Repositories.Count, 1);
+            
+            Assert.AreEqual(restorePoint1.Repositories[0].Storages.Count, 2);
+            Assert.AreEqual(restorePoint2.Repositories[0].Storages.Count, 1);
+        }
+        
+        [Test]
+        public void SplitVirtualTest()
+        {
+            var splitBackupJop = new BackupJob(split, fileSystem);
+
+            FileInfo file1 = splitBackupJop.AddObject(@"C:\Users\User\source\repos\FilesToAdd\test1.txt");
+            FileInfo file2 = splitBackupJop.AddObject(@"C:\Users\User\source\repos\FilesToAdd\test2.txt");
+
+            RestorePoint restorePoint1 = splitBackupJop.CreateRestorePoint(virtualSaver, "Restore Point", dir);
+            splitBackupJop.DeleteObject(file2);
+            RestorePoint restorePoint2 = splitBackupJop.CreateRestorePoint(virtualSaver, "Restore Point", dir);
+            
+            Assert.AreEqual(restorePoint1.Repositories.Count, 2);
+            Assert.AreEqual(restorePoint2.Repositories.Count, 1);
+            
+            Assert.AreEqual(restorePoint1.Repositories[0].Storages.Count, 1);
+            Assert.AreEqual(restorePoint1.Repositories[1].Storages.Count, 1);
+            Assert.AreEqual(restorePoint2.Repositories[0].Storages.Count, 1);
+        }
     }
 }
