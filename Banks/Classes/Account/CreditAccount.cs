@@ -1,4 +1,4 @@
-﻿namespace Banks.Classes
+﻿namespace Banks.Classes.Account
 {
     public class CreditAccount
     {

@@ -4,16 +4,16 @@ namespace Banks.Classes
 {
     public class CentralBank
     {
-        private List<Bank> _banks;
+        private List<Bank.Bank> _banks;
 
         public CentralBank()
         {
-            _banks = new List<Bank>();
+            _banks = new List<Bank.Bank>();
         }
 
-        public Bank RegisterNewBank()
+        public Bank.Bank RegisterNewBank()
         {
-            var newBank = new Bank();
+            var newBank = new Bank.Bank();
             _banks.Add(newBank);
             return newBank;
         }
