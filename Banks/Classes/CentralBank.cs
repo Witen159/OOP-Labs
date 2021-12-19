@@ -11,9 +11,9 @@ namespace Banks.Classes
             _banks = new List<Bank.Bank>();
         }
 
-        public Bank.Bank RegisterNewBank()
+        public Bank.Bank RegisterNewBank(int operationLimit)
         {
-            var newBank = new Bank.Bank();
+            var newBank = new Bank.Bank(operationLimit);
             _banks.Add(newBank);
             return newBank;
         }

@@ -1,24 +1,26 @@
 ﻿namespace Banks.Classes.Account
 {
-    public abstract class Account
+    public class Account : AbstractAccount
     {
         private static int _currentId = 1;
 
         public Account()
         {
-            Id = _currentId;
-            _currentId++;
+            Id = _currentId++;
         }
 
-        public int Money { get; private set; }
+        public double Money { get; }
         public int Id { get; }
-        public double InterestOnTheBalance { get; }
 
-        public virtual void Refill(int value)
+        public override void Refill(double value)
         {
         }
 
-        public void Withdrawal(int value)
+        public override void Withdrawal(double value)
+        {
+        }
+
+        public override void Transfer(AbstractAccount account, double value)
         {
         }
     }
