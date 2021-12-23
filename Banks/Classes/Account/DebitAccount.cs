@@ -1,24 +1,20 @@
 ﻿namespace Banks.Classes.Account
 {
-    public class DebitAccount : AccountDecorator
+    public class DebitAccount : AccountTemplate
     {
-        public DebitAccount(Account account, double interestOnTheBalance)
-            : base(account)
+        public DebitAccount(double startMoney, double interestOnTheBalance)
+            : base(startMoney)
         {
             InterestOnTheBalance = interestOnTheBalance;
         }
 
-        public double InterestOnTheBalance { get; }
+        public double InterestOnTheBalance { get; set; }
 
         public override void Refill(double value)
         {
         }
 
         public override void Withdrawal(double value)
-        {
-        }
-
-        public override void Transfer(AbstractAccount account, double value)
         {
         }
     }

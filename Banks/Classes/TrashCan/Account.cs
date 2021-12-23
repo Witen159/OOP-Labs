@@ -4,9 +4,10 @@
     {
         private static int _currentId = 1;
 
-        public Account()
+        public Account(double startMoney)
         {
             Id = _currentId++;
+            Money = startMoney;
         }
 
         public double Money { get; }
@@ -17,10 +18,6 @@
         }
 
         public override void Withdrawal(double value)
-        {
-        }
-
-        public override void Transfer(AbstractAccount account, double value)
         {
         }
     }
