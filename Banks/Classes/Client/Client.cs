@@ -1,16 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using Banks.Classes.Account;
 using Banks.Tools;
 
 namespace Banks.Classes.Client
 {
     public class Client
     {
+        private List<AccountTemplate> _accounts = new List<AccountTemplate>();
         public string Name { get; internal set; }
         public string Surname { get; internal set; }
         public string Address { get; internal set; }
         public int PassportNumber { get; internal set; }
         public bool Verification { get; internal set; }
         public int Id { get; internal set; }
+        public IReadOnlyList<AccountTemplate> Accounts => _accounts;
+
+        public void AddAccount(AccountTemplate newAccount)
+        {
+            _accounts.Add(newAccount);
+        }
 
         public void SetAddress(string address)
         {

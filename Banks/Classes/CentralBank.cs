@@ -1,26 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Banks.Classes.Account;
 using Banks.Classes.Bank;
 
 namespace Banks.Classes
 {
-    public class CentralBank
+    public sealed class CentralBank
     {
+        private static CentralBank _instance;
         private List<Bank.Bank> _banks = new List<Bank.Bank>();
+        private DateTime _currentTime;
 
-        public CentralBank()
+        private CentralBank()
         {
+            _currentTime = DateTime.Now;
         }
 
-        public Bank.Bank RegisterNewBank(int operationLimit, PercentAmount percentAmount)
+        public static CentralBank GetInstance()
         {
-            var newBank = new Bank.Bank(operationLimit, percentAmount);
+            return _instance ??= new CentralBank();
+        }
+
+        public Bank.Bank RegisterNewBank(int operationLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission)
+        {
+            var newBank = new Bank.Bank(operationLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission);
             _banks.Add(newBank);
             return newBank;
         }
 
-        public void Transfer(AccountDecorator fromAccount, AccountDecorator toAccount, double amountOfMoney)
+        public DateTime GetCurrentTime()
         {
+            return _instance._currentTime;
+        }
+
+        public void AddTime(TimeSpan timespan)
+        {
+            _instance._currentTime += timespan;
+        }
+
+        public void Transfer(AccountTemplate fromAccount, AccountTemplate toAccount, double amountOfMoney)
+        {
+        }
+
+        public Bank.Bank GetBank(int bankId)
+        {
+            return _banks.Find(x => x.Id == bankId);
         }
     }
 }

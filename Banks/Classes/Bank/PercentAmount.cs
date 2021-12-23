@@ -20,6 +20,17 @@ namespace Banks.Classes.Bank
             Setup(moneyBorders, percents);
         }
 
+        public double GetCurrentPercent(double money)
+        {
+            for (int i = 0; i < _moneyBorders.Count; i++)
+            {
+                if (money < _moneyBorders[i])
+                    return _percents[i];
+            }
+
+            return _percents[^1];
+        }
+
         private void Setup(List<int> moneyBorders, List<double> percents)
         {
             if (moneyBorders.Count + 1 != percents.Count)
