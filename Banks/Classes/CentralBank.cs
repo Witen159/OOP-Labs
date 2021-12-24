@@ -21,9 +21,9 @@ namespace Banks.Classes
             return _instance ??= new CentralBank();
         }
 
-        public Bank.Bank RegisterNewBank(int operationLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission)
+        public Bank.Bank RegisterNewBank(int operationLimit, int creditNegativeLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission)
         {
-            var newBank = new Bank.Bank(operationLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission, _currentTime);
+            var newBank = new Bank.Bank(operationLimit, creditNegativeLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission, _currentTime);
             _banks.Add(newBank);
             return newBank;
         }
@@ -37,10 +37,6 @@ namespace Banks.Classes
         {
             _instance._currentTime += timespan;
             PaymentOperation();
-        }
-
-        public void Transfer(AccountTemplate fromAccount, AccountTemplate toAccount, double amountOfMoney)
-        {
         }
 
         public Bank.Bank GetBank(int bankId)

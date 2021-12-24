@@ -19,8 +19,9 @@ namespace Banks.Classes.Account
         public int Id { get; }
         public bool Verification { get; private set; }
 
-        public virtual void Refill(double value)
+        public void Refill(double value)
         {
+            IncreaseMoney(value);
         }
 
         public virtual void Withdrawal(double value)
@@ -41,11 +42,10 @@ namespace Banks.Classes.Account
         {
         }
 
-        public void CancelOperation(double transactionAmount)
-        {
-            Money += transactionAmount;
-        }
-
+        // public void CancelOperation(double transactionAmount)
+        // {
+        //     Money += transactionAmount;
+        // }
         public void СonfirmVerification()
         {
             Verification = true;
@@ -56,6 +56,11 @@ namespace Banks.Classes.Account
             var firstDayOfMonth = new DateTime(CurrentTime.Year, CurrentTime.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             return CurrentTime == lastDayOfMonth;
+        }
+
+        protected int DaysPerYear()
+        {
+            return DateTime.IsLeapYear(CurrentTime.Year) ? 366 : 365;
         }
     }
 }

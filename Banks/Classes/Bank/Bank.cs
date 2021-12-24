@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Banks.Classes.Account;
 using Banks.Tools;
 
@@ -12,42 +13,66 @@ namespace Banks.Classes.Bank
         private List<Client.Client> _clients = new List<Client.Client>();
         private DateTime _currentTime;
 
-        public Bank(int operationLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission, DateTime currentTime)
+        public Bank(int operationLimit, int creditNegativeLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission, DateTime currentTime)
         {
             Id = _currentId++;
-            OperationLimit = operationLimit;
-            DepositInterestOnTheBalance = depositInterestOnTheBalance;
-            DebitInterestOnTheBalance = debitInterestOnTheBalance;
-            Commission = commission;
+            ChangeOperationLimit(operationLimit);
+            ChangeCreditNegativeLimit(creditNegativeLimit);
+            ChangeDepositInterestOnTheBalance(depositInterestOnTheBalance);
+            ChangeDebitInterestOnTheBalance(debitInterestOnTheBalance);
+            ChangeCommission(commission);
             _currentTime = currentTime;
         }
 
         public int Id { get; }
-        public double DebitInterestOnTheBalance { get; }
-        public double Commission { get; }
+        public double DebitInterestOnTheBalance { get; private set; }
+        public double Commission { get; private set; }
         public int OperationLimit { get; private set; }
-        public PercentAmount DepositInterestOnTheBalance { get; }
+        public int CreditNegativeLimit { get; private set; }
+        public PercentAmount DepositInterestOnTheBalance { get; private set; }
         public IReadOnlyList<AccountTemplate> Accounts => _accounts;
 
         public AccountTemplate AddDebitAccount(Client.Client client, double startMoney)
         {
+            ClientRegisterCheck(client);
             var debitAccount = new DebitAccount(startMoney, _currentTime, DebitInterestOnTheBalance, client.Verification);
             client.AddAccount(debitAccount);
             return debitAccount;
         }
 
-        public AccountTemplate AddDepositAccount(Client.Client client, double startMoney)
+        public AccountTemplate AddDepositAccount(Client.Client client, double startMoney, DateTime depositCloseTime)
         {
-            var depositAccount = new DepositAccount(startMoney, _currentTime, DepositInterestOnTheBalance.GetCurrentPercent(startMoney), client.Verification);
+            ClientRegisterCheck(client);
+            var depositAccount = new DepositAccount(startMoney, _currentTime, DepositInterestOnTheBalance.GetCurrentPercent(startMoney), depositCloseTime, client.Verification);
             client.AddAccount(depositAccount);
             return depositAccount;
         }
 
         public AccountTemplate AddCreditAccount(Client.Client client, double startMoney)
         {
-            var creditAccount = new CreditAccount(startMoney, _currentTime, Commission, client.Verification);
+            ClientRegisterCheck(client);
+            var creditAccount = new CreditAccount(startMoney, _currentTime, Commission, CreditNegativeLimit, client.Verification);
             client.AddAccount(creditAccount);
             return creditAccount;
+        }
+
+        public void Transfer(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney)
+        {
+            AccountCheck(sender);
+            OperationLimitCheck(sender, amountOfMoney);
+        }
+
+        public void Refill(AccountTemplate account, double amountOfMoney)
+        {
+            AccountCheck(account);
+            account.Refill(amountOfMoney);
+        }
+
+        public void Withdrawal(AccountTemplate account, double amountOfMoney)
+        {
+            AccountCheck(account);
+            OperationLimitCheck(account, amountOfMoney);
+            account.Withdrawal(amountOfMoney);
         }
 
         public void ChangeOperationLimit(int value)
@@ -55,6 +80,47 @@ namespace Banks.Classes.Bank
             if (value < 10000)
                 throw new BankException("Operation limit should be at least 10000");
             OperationLimit = value;
+        }
+
+        public void ChangeCreditNegativeLimit(int value)
+        {
+            if (value < 10000)
+                throw new BankException("Credit Negative Limit should be at least 10000");
+            CreditNegativeLimit = value;
+            foreach (CreditAccount account in _accounts.OfType<CreditAccount>())
+            {
+                account.CreditNegativeLimit = value;
+            }
+        }
+
+        public void ChangeCommission(double value)
+        {
+            if (value < 10000)
+                throw new BankException("Commission should be at least 10000");
+            Commission = value;
+            foreach (CreditAccount account in _accounts.OfType<CreditAccount>())
+            {
+                account.Commission = value;
+            }
+        }
+
+        public void ChangeDebitInterestOnTheBalance(double value)
+        {
+            if (value <= 0 || value >= 100)
+            {
+                throw new BankException("Percents must be greater than 0 and less than 100");
+            }
+
+            DebitInterestOnTheBalance = value;
+            foreach (DebitAccount account in _accounts.OfType<DebitAccount>())
+            {
+                account.InterestOnTheBalance = value;
+            }
+        }
+
+        public void ChangeDepositInterestOnTheBalance(PercentAmount newPercentAmount)
+        {
+            DepositInterestOnTheBalance = newPercentAmount;
         }
 
         public void RegisterNewClient(Client.Client client)
@@ -74,6 +140,24 @@ namespace Banks.Classes.Bank
             {
                 account.PaymentOperation(_currentTime);
             }
+        }
+
+        private void OperationLimitCheck(AccountTemplate account, double amountOfMoney)
+        {
+            if (!account.Verification && amountOfMoney > OperationLimit)
+                throw new BankException($"Unconfirmed accounts are prohibited from operations above {OperationLimit}");
+        }
+
+        private void ClientRegisterCheck(Client.Client client)
+        {
+            if (!_clients.Contains(client))
+                throw new BankException("Client should be registered in the bank");
+        }
+
+        private void AccountCheck(AccountTemplate account)
+        {
+            if (!_accounts.Contains(account))
+                throw new BankException("The account does not belong to this bank");
         }
     }
 }
