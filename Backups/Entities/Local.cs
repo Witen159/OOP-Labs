@@ -14,15 +14,15 @@ namespace Backups.Entities
             int count = 1;
             foreach (Repository repository in repositories)
             {
-                var tempDir = new DirectoryInfo(@$"{restorePoint.DirectoryPath}\TempDir");
+                var tempDir = new DirectoryInfo(Path.Combine(restorePoint.DirectoryPath, "TempDir"));
                 tempDir.Create();
 
                 foreach (FileInfo file in repository.Storages)
                 {
-                    file.CopyTo(@$"{tempDir.FullName}\{file.Name}", true);
+                    file.CopyTo(Path.Combine(tempDir.FullName, file.Name), true);
                 }
 
-                ZipFile.CreateFromDirectory(tempDir.FullName, @$"{pointDir.FullName}/Files_{count}.zip");
+                ZipFile.CreateFromDirectory(tempDir.FullName, Path.Combine(pointDir.FullName, $"Files_{count}.zip"));
                 count++;
 
                 tempDir.Delete(true);

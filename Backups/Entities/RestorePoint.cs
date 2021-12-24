@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Backups.Entities
 {
@@ -16,7 +17,7 @@ namespace Backups.Entities
             Name = restorePointName;
             DirectoryPath = restorePointDirectoryPath;
             _repositories = new List<Repository>();
-            PointDirectoryPath = $@"{DirectoryPath}\{Name} {Id}";
+            PointDirectoryPath = Path.Combine(DirectoryPath, $"{Name} {Id}");
         }
 
         public int Id { get; }
