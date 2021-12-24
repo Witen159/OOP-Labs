@@ -23,7 +23,7 @@ namespace Banks.Classes
 
         public Bank.Bank RegisterNewBank(int operationLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission)
         {
-            var newBank = new Bank.Bank(operationLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission);
+            var newBank = new Bank.Bank(operationLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission, _currentTime);
             _banks.Add(newBank);
             return newBank;
         }
@@ -36,6 +36,7 @@ namespace Banks.Classes
         public void AddTime(TimeSpan timespan)
         {
             _instance._currentTime += timespan;
+            PaymentOperation();
         }
 
         public void Transfer(AccountTemplate fromAccount, AccountTemplate toAccount, double amountOfMoney)
@@ -45,6 +46,14 @@ namespace Banks.Classes
         public Bank.Bank GetBank(int bankId)
         {
             return _banks.Find(x => x.Id == bankId);
+        }
+
+        private void PaymentOperation()
+        {
+            foreach (Bank.Bank bank in _banks)
+            {
+                bank.PaymentOperation(_currentTime);
+            }
         }
     }
 }

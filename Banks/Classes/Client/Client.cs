@@ -23,8 +23,6 @@ namespace Banks.Classes.Client
 
         public void SetAddress(string address)
         {
-            if (Address != null)
-                throw new BankException("Address already added");
             Address = address;
             VerificationChek();
         }
@@ -40,6 +38,13 @@ namespace Banks.Classes.Client
         private void VerificationChek()
         {
             Verification = Address != null && PassportNumber != 0;
+            if (Verification)
+            {
+                foreach (AccountTemplate account in _accounts)
+                {
+                    account.СonfirmVerification();
+                }
+            }
         }
     }
 }

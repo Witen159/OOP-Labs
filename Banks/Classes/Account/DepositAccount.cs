@@ -1,9 +1,11 @@
-﻿namespace Banks.Classes.Account
+﻿using System;
+
+namespace Banks.Classes.Account
 {
     public class DepositAccount : AccountTemplate
     {
-        public DepositAccount(double startMoney, double interestOnTheBalance)
-            : base(startMoney)
+        public DepositAccount(double startMoney, DateTime currentTime, double interestOnTheBalance, bool verification)
+            : base(startMoney, currentTime, verification)
         {
             InterestOnTheBalance = interestOnTheBalance;
         }
@@ -15,6 +17,10 @@
         }
 
         public override void Withdrawal(double value)
+        {
+        }
+
+        public override void PaymentOperation(DateTime timeOfTheNewPayment)
         {
         }
     }
