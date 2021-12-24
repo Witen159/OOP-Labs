@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Banks.Classes.Account;
+using Banks.Classes.Observer;
+using Banks.Classes.Observer.Notification;
 using Banks.Tools;
 
 namespace Banks.Classes.Bank
 {
-    public class Bank
+    public class Bank : IObservable
     {
         private static int _currentId = 1;
         private List<AccountTemplate> _accounts = new List<AccountTemplate>();
         private List<Client.Client> _clients = new List<Client.Client>();
+        private List<IObserver> _observers = new List<IObserver>();
         private DateTime _currentTime;
 
-        public Bank(int operationLimit, int creditNegativeLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission, DateTime currentTime)
+        public Bank(string name, int operationLimit, int creditNegativeLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission, DateTime currentTime)
         {
+            Name = name;
             Id = _currentId++;
             ChangeOperationLimit(operationLimit);
             ChangeCreditNegativeLimit(creditNegativeLimit);
@@ -25,6 +29,7 @@ namespace Banks.Classes.Bank
         }
 
         public int Id { get; }
+        public string Name { get; }
         public double DebitInterestOnTheBalance { get; private set; }
         public double Commission { get; private set; }
         public int OperationLimit { get; private set; }
@@ -60,6 +65,8 @@ namespace Banks.Classes.Bank
         {
             AccountCheck(sender);
             OperationLimitCheck(sender, amountOfMoney);
+            sender.ReduceMoney(amountOfMoney);
+            recipient.IncreaseMoney(amountOfMoney);
         }
 
         public void Refill(AccountTemplate account, double amountOfMoney)
@@ -80,6 +87,8 @@ namespace Banks.Classes.Bank
             if (value < 10000)
                 throw new BankException("Operation limit should be at least 10000");
             OperationLimit = value;
+
+            NotifyObservers(new OperationLimitNotification());
         }
 
         public void ChangeCreditNegativeLimit(int value)
@@ -91,6 +100,8 @@ namespace Banks.Classes.Bank
             {
                 account.CreditNegativeLimit = value;
             }
+
+            NotifyObservers(new CreditLimitNotification());
         }
 
         public void ChangeCommission(double value)
@@ -102,6 +113,8 @@ namespace Banks.Classes.Bank
             {
                 account.Commission = value;
             }
+
+            NotifyObservers(new CommissionNotification());
         }
 
         public void ChangeDebitInterestOnTheBalance(double value)
@@ -116,6 +129,8 @@ namespace Banks.Classes.Bank
             {
                 account.InterestOnTheBalance = value;
             }
+
+            NotifyObservers(new PercentNotification());
         }
 
         public void ChangeDepositInterestOnTheBalance(PercentAmount newPercentAmount)
@@ -139,6 +154,24 @@ namespace Banks.Classes.Bank
             foreach (AccountTemplate account in _accounts)
             {
                 account.PaymentOperation(_currentTime);
+            }
+        }
+
+        public void AddObserver(IObserver observer)
+        {
+            _observers.Add(observer);
+        }
+
+        public void RemoveObserver(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+
+        public void NotifyObservers(INotification notification)
+        {
+            foreach (IObserver observer in _observers)
+            {
+                observer.Update(notification);
             }
         }
 

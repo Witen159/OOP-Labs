@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Banks.Classes.Account;
+using Banks.Classes.Observer;
+using Banks.Classes.Observer.Notification;
 using Banks.Tools;
 
 namespace Banks.Classes.Client
 {
-    public class Client
+    public class Client : IObserver
     {
         private List<AccountTemplate> _accounts = new List<AccountTemplate>();
+        private List<INotification> _notifications = new List<INotification>();
         public string Name { get; internal set; }
         public string Surname { get; internal set; }
         public string Address { get; internal set; }
@@ -33,6 +36,11 @@ namespace Banks.Classes.Client
                 throw new BankException("Passport number already added");
             PassportNumber = passportNumber;
             VerificationChek();
+        }
+
+        public void Update(INotification notification)
+        {
+            _notifications.Add(notification);
         }
 
         private void VerificationChek()

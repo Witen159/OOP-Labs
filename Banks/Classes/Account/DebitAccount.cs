@@ -16,9 +16,14 @@ namespace Banks.Classes.Account
 
         public override void Withdrawal(double value)
         {
-            if (value > Money)
-                throw new BankException("Debit account cannot go into negative territory");
             ReduceMoney(value);
+        }
+
+        public override void ReduceMoney(double amountOfMoney)
+        {
+            if (amountOfMoney > Money)
+                throw new BankException("Debit account cannot go into negative territory");
+            Money -= amountOfMoney;
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)

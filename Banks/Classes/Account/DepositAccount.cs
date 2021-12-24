@@ -22,9 +22,16 @@ namespace Banks.Classes.Account
 
         public override void Withdrawal(double value)
         {
+            ReduceMoney(value);
+        }
+
+        public override void ReduceMoney(double amountOfMoney)
+        {
             if (AccountIsOpen)
                 throw new BankException("You cannot withdraw money from the account until it is close");
-            ReduceMoney(value);
+            if (amountOfMoney > Money)
+                throw new BankException("Deposit account cannot go into negative territory");
+            Money -= amountOfMoney;
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)

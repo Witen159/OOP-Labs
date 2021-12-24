@@ -14,7 +14,7 @@ namespace Banks.Classes.Account
             Verification = verification;
         }
 
-        public double Money { get; private set; }
+        public double Money { get; protected set; }
         public DateTime CurrentTime { get; protected set; }
         public int Id { get; }
         public bool Verification { get; private set; }
@@ -33,7 +33,7 @@ namespace Banks.Classes.Account
             Money += amountOfMoney;
         }
 
-        public void ReduceMoney(double amountOfMoney)
+        public virtual void ReduceMoney(double amountOfMoney)
         {
             Money -= amountOfMoney;
         }

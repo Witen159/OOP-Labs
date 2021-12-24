@@ -17,8 +17,13 @@ namespace Banks.Classes.Account
 
         public override void Withdrawal(double value)
         {
-            IsWillGoOverCreditLimit(value);
             ReduceMoney(value);
+        }
+
+        public override void ReduceMoney(double amountOfMoney)
+        {
+            IsWillGoOverCreditLimit(amountOfMoney);
+            Money -= amountOfMoney;
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)

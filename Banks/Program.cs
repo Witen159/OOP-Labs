@@ -21,6 +21,7 @@ namespace Banks
             var percentAmount = new PercentAmount(a, b);
             var centralBank = CentralBank.GetInstance();
             Bank bank = centralBank.RegisterNewBank(10000, 10000, percentAmount, 3, 10000);
+            bank.RegisterNewClient(client);
             AccountTemplate account = bank.AddCreditAccount(client, 10000);
             if (account is CreditAccount)
                 Console.WriteLine("It works");
