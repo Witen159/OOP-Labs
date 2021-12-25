@@ -15,11 +15,6 @@ namespace Banks.Classes.Account
         public double Commission { get; set; }
         public int CreditNegativeLimit { get; set; }
 
-        public override void Withdrawal(double value)
-        {
-            ReduceMoney(value);
-        }
-
         public override void ReduceMoney(double amountOfMoney)
         {
             IsWillGoOverCreditLimit(amountOfMoney);

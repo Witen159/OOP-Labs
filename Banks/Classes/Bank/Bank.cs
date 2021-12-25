@@ -4,6 +4,7 @@ using System.Linq;
 using Banks.Classes.Account;
 using Banks.Classes.Observer;
 using Banks.Classes.Observer.Notification;
+using Banks.Classes.Transaction;
 using Banks.Tools;
 
 namespace Banks.Classes.Bank
@@ -65,21 +66,32 @@ namespace Banks.Classes.Bank
         {
             AccountCheck(sender);
             OperationLimitCheck(sender, amountOfMoney);
-            sender.ReduceMoney(amountOfMoney);
-            recipient.IncreaseMoney(amountOfMoney);
+            var transaction = new TransferTransaction(sender, recipient, amountOfMoney, _currentTime);
+            sender.AddTransaction(transaction);
+            recipient.AddTransaction(transaction);
         }
 
         public void Refill(AccountTemplate account, double amountOfMoney)
         {
             AccountCheck(account);
-            account.Refill(amountOfMoney);
+            var transaction = new RefillTransaction(null, account, amountOfMoney, _currentTime);
+            account.AddTransaction(transaction);
         }
 
         public void Withdrawal(AccountTemplate account, double amountOfMoney)
         {
             AccountCheck(account);
             OperationLimitCheck(account, amountOfMoney);
-            account.Withdrawal(amountOfMoney);
+            var transaction = new WithdrawalTransaction(account, null, amountOfMoney, _currentTime);
+            account.AddTransaction(transaction);
+        }
+
+        public void CancelOperation(AccountTemplate account, AbstractTransaction transaction)
+        {
+            AccountCheck(account);
+            account.TransactionCheck(transaction);
+            var cancellation = new CancelTransaction(transaction);
+            account.AddTransaction(cancellation);
         }
 
         public void ChangeOperationLimit(int value)

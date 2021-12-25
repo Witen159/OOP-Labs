@@ -20,7 +20,7 @@ namespace Banks
             var b = new List<double>() { 1, 2, 3 };
             var percentAmount = new PercentAmount(a, b);
             var centralBank = CentralBank.GetInstance();
-            Bank bank = centralBank.RegisterNewBank(10000, 10000, percentAmount, 3, 10000);
+            Bank bank = centralBank.RegisterNewBank("Тинькоф", 10000, 10000, percentAmount, 3, 10000);
             bank.RegisterNewClient(client);
             AccountTemplate account = bank.AddCreditAccount(client, 10000);
             if (account is CreditAccount)

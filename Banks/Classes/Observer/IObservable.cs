@@ -6,6 +6,6 @@ namespace Banks.Classes.Observer
     {
         void AddObserver(IObserver observer);
         void RemoveObserver(IObserver observer);
-        void NotifyObservers(INotification);
+        void NotifyObservers(INotification notification);
     }
 }

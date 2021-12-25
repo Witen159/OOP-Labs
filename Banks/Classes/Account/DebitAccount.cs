@@ -14,11 +14,6 @@ namespace Banks.Classes.Account
 
         public double InterestOnTheBalance { get; set; }
 
-        public override void Withdrawal(double value)
-        {
-            ReduceMoney(value);
-        }
-
         public override void ReduceMoney(double amountOfMoney)
         {
             if (amountOfMoney > Money)

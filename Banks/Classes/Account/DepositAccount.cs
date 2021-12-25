@@ -20,11 +20,6 @@ namespace Banks.Classes.Account
         public DateTime DepositCloseTime { get; }
         public bool AccountIsOpen { get; private set; }
 
-        public override void Withdrawal(double value)
-        {
-            ReduceMoney(value);
-        }
-
         public override void ReduceMoney(double amountOfMoney)
         {
             if (AccountIsOpen)
