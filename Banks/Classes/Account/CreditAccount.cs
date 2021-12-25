@@ -18,7 +18,7 @@ namespace Banks.Classes.Account
         public override void ReduceMoney(double amountOfMoney)
         {
             IsWillGoOverCreditLimit(amountOfMoney);
-            Money -= amountOfMoney;
+            base.ReduceMoney(amountOfMoney);
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)
@@ -32,7 +32,7 @@ namespace Banks.Classes.Account
                     ReduceMoney(Commission);
                 }
 
-                CurrentTime.AddDays(1);
+                CurrentTime = CurrentTime.AddDays(1);
             }
         }
 

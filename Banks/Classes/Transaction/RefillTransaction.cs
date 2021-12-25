@@ -8,7 +8,8 @@ namespace Banks.Classes.Transaction
         public RefillTransaction(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney, DateTime currentTime)
             : base(sender, recipient, amountOfMoney, currentTime)
         {
-            recipient.IncreaseMoney(amountOfMoney);
+            Recipient.IncreaseMoney(amountOfMoney);
+            Recipient.AddTransaction(this);
         }
     }
 }

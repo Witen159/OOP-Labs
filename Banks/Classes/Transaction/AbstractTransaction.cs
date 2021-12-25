@@ -23,8 +23,5 @@ namespace Banks.Classes.Transaction
         public DateTime TransactionTime { get; }
         public int Id { get; }
         public bool Canceled { get; }
-        public void Cancel()
-        {
-        }
     }
 }

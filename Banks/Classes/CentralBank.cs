@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Banks.Classes.Account;
 using Banks.Classes.Bank;
+using Banks.Tools;
 
 namespace Banks.Classes
 {
@@ -9,33 +10,36 @@ namespace Banks.Classes
     {
         private static CentralBank _instance;
         private List<Bank.Bank> _banks = new List<Bank.Bank>();
-        private DateTime _currentTime;
 
-        private CentralBank()
+        private CentralBank(DateTime currentTime)
         {
-            _currentTime = DateTime.Now;
+            CurrentTime = currentTime;
         }
 
-        public static CentralBank GetInstance()
+        public DateTime CurrentTime { get; private set; }
+
+        public static CentralBank GetInstance(DateTime currentTime)
         {
-            return _instance ??= new CentralBank();
+            return _instance ??= new CentralBank(currentTime);
         }
 
         public Bank.Bank RegisterNewBank(string name, int operationLimit, int creditNegativeLimit, PercentAmount depositInterestOnTheBalance, double debitInterestOnTheBalance, double commission)
         {
-            var newBank = new Bank.Bank(name, operationLimit, creditNegativeLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission, _currentTime);
+            var newBank = new Bank.Bank(name, operationLimit, creditNegativeLimit, depositInterestOnTheBalance, debitInterestOnTheBalance, commission, CurrentTime);
             _banks.Add(newBank);
             return newBank;
         }
 
         public DateTime GetCurrentTime()
         {
-            return _instance._currentTime;
+            return _instance.CurrentTime;
         }
 
-        public void AddTime(TimeSpan timespan)
+        public void NewDate(DateTime newDate)
         {
-            _instance._currentTime += timespan;
+            if ((newDate - CurrentTime).Days < 1)
+                throw new BankException("New date should be at least next day");
+            _instance.CurrentTime = newDate;
             PaymentOperation();
         }
 
@@ -48,7 +52,7 @@ namespace Banks.Classes
         {
             foreach (Bank.Bank bank in _banks)
             {
-                bank.PaymentOperation(_currentTime);
+                bank.PaymentOperation(CurrentTime);
             }
         }
     }

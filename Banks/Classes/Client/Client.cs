@@ -13,11 +13,12 @@ namespace Banks.Classes.Client
         private List<INotification> _notifications = new List<INotification>();
         public string Name { get; internal set; }
         public string Surname { get; internal set; }
-        public string Address { get; internal set; }
-        public int PassportNumber { get; internal set; }
+        public string Address { get; internal set; } = null;
+        public int PassportNumber { get; internal set; } = 0;
         public bool Verification { get; internal set; }
         public int Id { get; internal set; }
         public IReadOnlyList<AccountTemplate> Accounts => _accounts;
+        public IReadOnlyList<INotification> Notifications => _notifications;
 
         public void AddAccount(AccountTemplate newAccount)
         {

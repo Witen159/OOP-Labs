@@ -8,7 +8,8 @@ namespace Banks.Classes.Transaction
         public WithdrawalTransaction(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney, DateTime currentTime)
             : base(sender, recipient, amountOfMoney, currentTime)
         {
-            sender.ReduceMoney(amountOfMoney);
+            Sender.ReduceMoney(amountOfMoney);
+            Sender.AddTransaction(this);
         }
     }
 }

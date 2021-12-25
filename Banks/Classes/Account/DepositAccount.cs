@@ -26,7 +26,7 @@ namespace Banks.Classes.Account
                 throw new BankException("You cannot withdraw money from the account until it is close");
             if (amountOfMoney > Money)
                 throw new BankException("Deposit account cannot go into negative territory");
-            Money -= amountOfMoney;
+            base.ReduceMoney(amountOfMoney);
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)
@@ -36,7 +36,7 @@ namespace Banks.Classes.Account
             {
                 if (AccountIsOpen)
                 {
-                    _deductions += Money * (InterestOnTheBalance % DaysPerYear());
+                    _deductions += Money * ((InterestOnTheBalance * 0.01) / DaysPerYear());
 
                     if (IsItLastDayOfMonth())
                     {
@@ -44,7 +44,7 @@ namespace Banks.Classes.Account
                         _deductions = 0;
                     }
 
-                    if (CurrentTime == DepositCloseTime)
+                    if (CurrentTime.Date == DepositCloseTime.Date)
                     {
                         IncreaseMoney(_deductions);
                         _deductions = 0;
@@ -52,7 +52,7 @@ namespace Banks.Classes.Account
                     }
                 }
 
-                CurrentTime.AddDays(1);
+                CurrentTime = CurrentTime.AddDays(1);
             }
         }
     }

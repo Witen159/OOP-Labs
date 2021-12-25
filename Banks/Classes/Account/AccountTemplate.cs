@@ -8,6 +8,7 @@ namespace Banks.Classes.Account
     public abstract class AccountTemplate
     {
         private static int _currentId = 1;
+        private double _money;
         private List<AbstractTransaction> _transactionHistory = new List<AbstractTransaction>();
 
         public AccountTemplate(double startMoney, DateTime currentTime, bool verification)
@@ -18,7 +19,12 @@ namespace Banks.Classes.Account
             Verification = verification;
         }
 
-        public double Money { get; protected set; }
+        public double Money
+        {
+            get { return Math.Round(_money, 2); }
+            protected set => _money = value;
+        }
+
         public DateTime CurrentTime { get; protected set; }
         public int Id { get; }
         public bool Verification { get; private set; }
@@ -26,11 +32,15 @@ namespace Banks.Classes.Account
 
         public void IncreaseMoney(double amountOfMoney)
         {
+            if (amountOfMoney < 0)
+                throw new BankException("You should change account money only in positive amount of money");
             Money += amountOfMoney;
         }
 
         public virtual void ReduceMoney(double amountOfMoney)
         {
+            if (amountOfMoney < 0)
+                throw new BankException("You should change account money only in positive amount of money");
             Money -= amountOfMoney;
         }
 
@@ -43,6 +53,7 @@ namespace Banks.Classes.Account
             _transactionHistory.Add(transaction);
         }
 
+        // Изменение баланса в обход ограничений счета для отмены операций
         public void CancelOperation(double transactionAmount)
         {
             Money += transactionAmount;
@@ -63,7 +74,7 @@ namespace Banks.Classes.Account
         {
             var firstDayOfMonth = new DateTime(CurrentTime.Year, CurrentTime.Month, 1);
             DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            return CurrentTime == lastDayOfMonth;
+            return CurrentTime.Date == lastDayOfMonth.Date;
         }
 
         protected int DaysPerYear()

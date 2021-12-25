@@ -43,6 +43,7 @@ namespace Banks.Classes.Bank
             ClientRegisterCheck(client);
             var debitAccount = new DebitAccount(startMoney, _currentTime, DebitInterestOnTheBalance, client.Verification);
             client.AddAccount(debitAccount);
+            _accounts.Add(debitAccount);
             return debitAccount;
         }
 
@@ -51,6 +52,7 @@ namespace Banks.Classes.Bank
             ClientRegisterCheck(client);
             var depositAccount = new DepositAccount(startMoney, _currentTime, DepositInterestOnTheBalance.GetCurrentPercent(startMoney), depositCloseTime, client.Verification);
             client.AddAccount(depositAccount);
+            _accounts.Add(depositAccount);
             return depositAccount;
         }
 
@@ -59,39 +61,33 @@ namespace Banks.Classes.Bank
             ClientRegisterCheck(client);
             var creditAccount = new CreditAccount(startMoney, _currentTime, Commission, CreditNegativeLimit, client.Verification);
             client.AddAccount(creditAccount);
+            _accounts.Add(creditAccount);
             return creditAccount;
         }
 
-        public void Transfer(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney)
+        public AbstractTransaction Transfer(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney)
         {
             AccountCheck(sender);
             OperationLimitCheck(sender, amountOfMoney);
-            var transaction = new TransferTransaction(sender, recipient, amountOfMoney, _currentTime);
-            sender.AddTransaction(transaction);
-            recipient.AddTransaction(transaction);
+            return new TransferTransaction(sender, recipient, amountOfMoney, _currentTime);
         }
 
-        public void Refill(AccountTemplate account, double amountOfMoney)
+        public AbstractTransaction Refill(AccountTemplate account, double amountOfMoney)
         {
             AccountCheck(account);
-            var transaction = new RefillTransaction(null, account, amountOfMoney, _currentTime);
-            account.AddTransaction(transaction);
+            return new RefillTransaction(null, account, amountOfMoney, _currentTime);
         }
 
-        public void Withdrawal(AccountTemplate account, double amountOfMoney)
+        public AbstractTransaction Withdrawal(AccountTemplate account, double amountOfMoney)
         {
             AccountCheck(account);
             OperationLimitCheck(account, amountOfMoney);
-            var transaction = new WithdrawalTransaction(account, null, amountOfMoney, _currentTime);
-            account.AddTransaction(transaction);
+            return new WithdrawalTransaction(account, null, amountOfMoney, _currentTime);
         }
 
-        public void CancelOperation(AccountTemplate account, AbstractTransaction transaction)
+        public AbstractTransaction CancelOperation(AbstractTransaction transaction)
         {
-            AccountCheck(account);
-            account.TransactionCheck(transaction);
-            var cancellation = new CancelTransaction(transaction);
-            account.AddTransaction(cancellation);
+            return new CancelTransaction(transaction);
         }
 
         public void ChangeOperationLimit(int value)
@@ -118,7 +114,7 @@ namespace Banks.Classes.Bank
 
         public void ChangeCommission(double value)
         {
-            if (value < 10000)
+            if (value < 1000)
                 throw new BankException("Commission should be at least 10000");
             Commission = value;
             foreach (CreditAccount account in _accounts.OfType<CreditAccount>())

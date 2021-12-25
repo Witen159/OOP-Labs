@@ -11,8 +11,17 @@ namespace Banks.Classes.Transaction
         {
             if (transaction is CancelTransaction)
                 throw new BankException("You cant cancel CancelTransaction");
-            transaction.Sender?.CancelOperation(AmountOfMoney);
-            transaction.Recipient?.CancelOperation(-AmountOfMoney);
+            if (Sender != null)
+            {
+                Sender.CancelOperation(AmountOfMoney);
+                Sender.AddTransaction(this);
+            }
+
+            if (Recipient != null)
+            {
+                Recipient.CancelOperation(-AmountOfMoney);
+                Recipient.AddTransaction(transaction);
+            }
         }
     }
 }

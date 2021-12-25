@@ -18,7 +18,7 @@ namespace Banks.Classes.Account
         {
             if (amountOfMoney > Money)
                 throw new BankException("Debit account cannot go into negative territory");
-            Money -= amountOfMoney;
+            base.ReduceMoney(amountOfMoney);
         }
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)
@@ -26,14 +26,14 @@ namespace Banks.Classes.Account
             int differenceInDays = (timeOfTheNewPayment - CurrentTime).Days;
             for (int days = 0; days < differenceInDays; days++)
             {
-                _deductions += Money * (InterestOnTheBalance % DaysPerYear());
+                _deductions += Money * ((InterestOnTheBalance * 0.01) / DaysPerYear());
                 if (IsItLastDayOfMonth())
                 {
                     IncreaseMoney(_deductions);
                     _deductions = 0;
                 }
 
-                CurrentTime.AddDays(1);
+                CurrentTime = CurrentTime.AddDays(1);
             }
         }
     }

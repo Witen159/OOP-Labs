@@ -8,8 +8,11 @@ namespace Banks.Classes.Transaction
         public TransferTransaction(AccountTemplate sender, AccountTemplate recipient, double amountOfMoney, DateTime currentTime)
             : base(sender, recipient, amountOfMoney, currentTime)
         {
-            sender.ReduceMoney(amountOfMoney);
-            recipient.IncreaseMoney(amountOfMoney);
+            Sender.ReduceMoney(amountOfMoney);
+            Sender.AddTransaction(this);
+
+            Recipient.IncreaseMoney(amountOfMoney);
+            Recipient.AddTransaction(this);
         }
     }
 }

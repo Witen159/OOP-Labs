@@ -2,6 +2,7 @@
 {
     public interface IClientBuilder
     {
+        void Reset();
         void BuildId(int id);
         void BuildName(string name);
         void BuildSurname(string surname);

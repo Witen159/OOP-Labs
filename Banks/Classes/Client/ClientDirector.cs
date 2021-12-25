@@ -12,6 +12,7 @@
 
         public void BuildDefaultClient(string name, string surname)
         {
+            _builder.Reset();
             _builder.BuildName(name);
             _builder.BuildSurname(surname);
             _builder.BuildId(_clientId);
@@ -21,6 +22,7 @@
 
         public void BuildClientWithPassport(string name, string surname, int passportNumber)
         {
+            _builder.Reset();
             _builder.BuildName(name);
             _builder.BuildSurname(surname);
             _builder.BuildPassport(passportNumber);
@@ -31,6 +33,7 @@
 
         public void BuildClientWithAddress(string name, string surname, string address)
         {
+            _builder.Reset();
             _builder.BuildName(name);
             _builder.BuildSurname(surname);
             _builder.BuildAddress(address);
@@ -41,6 +44,7 @@
 
         public void BuildFullClient(string name, string surname, int passportNumber, string address)
         {
+            _builder.Reset();
             _builder.BuildName(name);
             _builder.BuildSurname(surname);
             _builder.BuildPassport(passportNumber);
