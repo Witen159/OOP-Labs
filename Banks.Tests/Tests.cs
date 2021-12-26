@@ -112,9 +112,9 @@ namespace Banks.Tests
             bank.RegisterNewClient(client);
             
             bank.AddObserver(client);
-            bank.ChangeCommission(1500);
-            bank.ChangeOperationLimit(11000);
-            bank.ChangeCreditNegativeLimit(12000);
+            bank.BankParametersChanger.ChangeCommission(1500);
+            bank.BankParametersChanger.ChangeOperationLimit(11000);
+            bank.BankParametersChanger.ChangeCreditNegativeLimit(12000);
             
             Assert.IsTrue(client.Notifications[0] is CommissionNotification);
             Assert.IsTrue(client.Notifications[1] is OperationLimitNotification);

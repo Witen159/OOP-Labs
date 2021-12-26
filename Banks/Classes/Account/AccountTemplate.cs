@@ -69,17 +69,5 @@ namespace Banks.Classes.Account
             if (!_transactionHistory.Contains(transaction))
                 throw new BankException($"Transaction {transaction.Id}  does not belong to the account {Id}");
         }
-
-        protected bool IsItLastDayOfMonth()
-        {
-            var firstDayOfMonth = new DateTime(CurrentTime.Year, CurrentTime.Month, 1);
-            DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            return CurrentTime.Date == lastDayOfMonth.Date;
-        }
-
-        protected int DaysPerYear()
-        {
-            return DateTime.IsLeapYear(CurrentTime.Year) ? 366 : 365;
-        }
     }
 }

@@ -21,21 +21,23 @@ namespace Banks.Classes.Bank
         {
             Name = name;
             Id = _currentId++;
-            ChangeOperationLimit(operationLimit);
-            ChangeCreditNegativeLimit(creditNegativeLimit);
-            ChangeDepositInterestOnTheBalance(depositInterestOnTheBalance);
-            ChangeDebitInterestOnTheBalance(debitInterestOnTheBalance);
-            ChangeCommission(commission);
+            BankParametersChanger = new BankParametersChanger(this);
+            BankParametersChanger.ChangeOperationLimit(operationLimit);
+            BankParametersChanger.ChangeCreditNegativeLimit(creditNegativeLimit);
+            BankParametersChanger.ChangeDepositInterestOnTheBalance(depositInterestOnTheBalance);
+            BankParametersChanger.ChangeDebitInterestOnTheBalance(debitInterestOnTheBalance);
+            BankParametersChanger.ChangeCommission(commission);
             _currentTime = currentTime;
         }
 
         public int Id { get; }
         public string Name { get; }
-        public double DebitInterestOnTheBalance { get; private set; }
-        public double Commission { get; private set; }
-        public int OperationLimit { get; private set; }
-        public int CreditNegativeLimit { get; private set; }
-        public PercentAmount DepositInterestOnTheBalance { get; private set; }
+        public BankParametersChanger BankParametersChanger { get; }
+        public double DebitInterestOnTheBalance { get; internal set; }
+        public double Commission { get; internal set; }
+        public int OperationLimit { get; internal set; }
+        public int CreditNegativeLimit { get; internal set; }
+        public PercentAmount DepositInterestOnTheBalance { get; internal set; }
         public IReadOnlyList<AccountTemplate> Accounts => _accounts;
 
         public AccountTemplate AddDebitAccount(Client.Client client, double startMoney)
@@ -88,62 +90,6 @@ namespace Banks.Classes.Bank
         public AbstractTransaction CancelOperation(AbstractTransaction transaction)
         {
             return new CancelTransaction(transaction);
-        }
-
-        public void ChangeOperationLimit(int value)
-        {
-            if (value < 10000)
-                throw new BankException("Operation limit should be at least 10000");
-            OperationLimit = value;
-
-            NotifyObservers(new OperationLimitNotification());
-        }
-
-        public void ChangeCreditNegativeLimit(int value)
-        {
-            if (value < 10000)
-                throw new BankException("Credit Negative Limit should be at least 10000");
-            CreditNegativeLimit = value;
-            foreach (CreditAccount account in _accounts.OfType<CreditAccount>())
-            {
-                account.CreditNegativeLimit = value;
-            }
-
-            NotifyObservers(new CreditLimitNotification());
-        }
-
-        public void ChangeCommission(double value)
-        {
-            if (value < 1000)
-                throw new BankException("Commission should be at least 10000");
-            Commission = value;
-            foreach (CreditAccount account in _accounts.OfType<CreditAccount>())
-            {
-                account.Commission = value;
-            }
-
-            NotifyObservers(new CommissionNotification());
-        }
-
-        public void ChangeDebitInterestOnTheBalance(double value)
-        {
-            if (value <= 0 || value >= 100)
-            {
-                throw new BankException("Percents must be greater than 0 and less than 100");
-            }
-
-            DebitInterestOnTheBalance = value;
-            foreach (DebitAccount account in _accounts.OfType<DebitAccount>())
-            {
-                account.InterestOnTheBalance = value;
-            }
-
-            NotifyObservers(new PercentNotification());
-        }
-
-        public void ChangeDepositInterestOnTheBalance(PercentAmount newPercentAmount)
-        {
-            DepositInterestOnTheBalance = newPercentAmount;
         }
 
         public void RegisterNewClient(Client.Client client)

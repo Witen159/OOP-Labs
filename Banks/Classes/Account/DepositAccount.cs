@@ -31,14 +31,15 @@ namespace Banks.Classes.Account
 
         public override void PaymentOperation(DateTime timeOfTheNewPayment)
         {
+            var daysControlSystem = new DaysControlSystem();
             int differenceInDays = (timeOfTheNewPayment - CurrentTime).Days;
             for (int days = 0; days < differenceInDays; days++)
             {
                 if (AccountIsOpen)
                 {
-                    _deductions += Money * ((InterestOnTheBalance * 0.01) / DaysPerYear());
+                    _deductions += Money * ((InterestOnTheBalance * 0.01) / daysControlSystem.DaysPerYear(CurrentTime));
 
-                    if (IsItLastDayOfMonth())
+                    if (daysControlSystem.IsItLastDayOfMonth(CurrentTime))
                     {
                         IncreaseMoney(_deductions);
                         _deductions = 0;
