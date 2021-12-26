@@ -67,40 +67,7 @@ namespace Banks
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine("Enter the parameters");
-                        Console.WriteLine("Bank name:");
-                        string bankName = Console.ReadLine();
-
-                        Console.WriteLine("Operations limit:");
-                        int operationsLimit = Convert.ToInt32(Console.ReadLine());
-
-                        Console.WriteLine("Credit negative limit:");
-                        int creditLimit = Convert.ToInt32(Console.ReadLine());
-
-                        Console.WriteLine("Commission:");
-                        double commission = Convert.ToDouble(Console.ReadLine());
-
-                        Console.WriteLine("Debit interest on the balance:");
-                        double debitInterest = Convert.ToDouble(Console.ReadLine());
-
-                        Console.WriteLine(
-                            "Percent for deposit accounts (count, Money borders (count - 1 times), percents (count times)):");
-                        int count = Convert.ToInt32(Console.ReadLine());
-                        var moneyBorders = new List<int>();
-                        for (int i = 0; i < count - 1; i++)
-                        {
-                            moneyBorders.Add(Convert.ToInt32(Console.ReadLine()));
-                        }
-
-                        var percents = new List<double>();
-                        for (int i = 0; i < count; i++)
-                        {
-                            percents.Add(Convert.ToDouble(Console.ReadLine()));
-                        }
-
-                        var percentAmount = new PercentAmount(moneyBorders, percents);
-
-                        centralBank.RegisterNewBank(bankName, operationsLimit, creditLimit, percentAmount, debitInterest, commission);
+                        CreateBank();
 
                         CentralBankManager();
                         return;
@@ -183,39 +150,7 @@ namespace Banks
                         ClientManager();
                         break;
                     case 2:
-                        Console.WriteLine("To have verified profile you need to add your address and passport");
-                        Console.WriteLine("Type your name:");
-                        string name = Console.ReadLine();
-                        Console.WriteLine("Type your surname:");
-                        string surname = Console.ReadLine();
-
-                        foreach (Client client in clientsList)
-                        {
-                            if (name == client.Name && surname == client.Surname)
-                            {
-                                Console.WriteLine("This user is already registered");
-                                LogIn();
-                                return;
-                            }
-                        }
-
-                        Console.WriteLine("Type your address or tap Enter");
-                        string address = Console.ReadLine();
-
-                        Console.WriteLine("Type your passport number or tap Enter");
-                        string passport = Console.ReadLine();
-
-                        if (address == string.Empty && passport == string.Empty)
-                            clientDirector.BuildDefaultClient(name, surname);
-                        else if (address == string.Empty)
-                            clientDirector.BuildClientWithPassport(name, surname, Convert.ToInt32(passport));
-                        else if (passport == string.Empty)
-                            clientDirector.BuildClientWithAddress(name, surname, address);
-                        else
-                            clientDirector.BuildFullClient(name, surname, Convert.ToInt32(passport), address);
-
-                        currentClient = clientBuilder.GetClient();
-                        clientsList.Add(currentClient);
+                        Registration();
 
                         ClientManager();
                         break;
@@ -366,6 +301,81 @@ namespace Banks
                         ClientManager();
                         return;
                 }
+            }
+
+            void CreateBank()
+            {
+                Console.WriteLine("Enter the parameters");
+                Console.WriteLine("Bank name:");
+                string bankName = Console.ReadLine();
+
+                Console.WriteLine("Operations limit:");
+                int operationsLimit = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Credit negative limit:");
+                int creditLimit = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Commission:");
+                double commission = Convert.ToDouble(Console.ReadLine());
+
+                Console.WriteLine("Debit interest on the balance:");
+                double debitInterest = Convert.ToDouble(Console.ReadLine());
+
+                Console.WriteLine(
+                    "Percent for deposit accounts (count, Money borders (count - 1 times), percents (count times)):");
+                int count = Convert.ToInt32(Console.ReadLine());
+                var moneyBorders = new List<int>();
+                for (int i = 0; i < count - 1; i++)
+                {
+                    moneyBorders.Add(Convert.ToInt32(Console.ReadLine()));
+                }
+
+                var percents = new List<double>();
+                for (int i = 0; i < count; i++)
+                {
+                    percents.Add(Convert.ToDouble(Console.ReadLine()));
+                }
+
+                var percentAmount = new PercentAmount(moneyBorders, percents);
+
+                centralBank.RegisterNewBank(bankName, operationsLimit, creditLimit, percentAmount, debitInterest, commission);
+            }
+
+            void Registration()
+            {
+                Console.WriteLine("To have verified profile you need to add your address and passport");
+                Console.WriteLine("Type your name:");
+                string name = Console.ReadLine();
+                Console.WriteLine("Type your surname:");
+                string surname = Console.ReadLine();
+
+                foreach (Client client in clientsList)
+                {
+                    if (name == client.Name && surname == client.Surname)
+                    {
+                        Console.WriteLine("This user is already registered");
+                        LogIn();
+                        return;
+                    }
+                }
+
+                Console.WriteLine("Type your address or tap Enter");
+                string address = Console.ReadLine();
+
+                Console.WriteLine("Type your passport number or tap Enter");
+                string passport = Console.ReadLine();
+
+                if (address == string.Empty && passport == string.Empty)
+                    clientDirector.BuildDefaultClient(name, surname);
+                else if (address == string.Empty)
+                    clientDirector.BuildClientWithPassport(name, surname, Convert.ToInt32(passport));
+                else if (passport == string.Empty)
+                    clientDirector.BuildClientWithAddress(name, surname, address);
+                else
+                    clientDirector.BuildFullClient(name, surname, Convert.ToInt32(passport), address);
+
+                currentClient = clientBuilder.GetClient();
+                clientsList.Add(currentClient);
             }
 
             void CreateAccount()
