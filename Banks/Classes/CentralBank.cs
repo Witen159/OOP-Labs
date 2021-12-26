@@ -17,6 +17,7 @@ namespace Banks.Classes
         }
 
         public DateTime CurrentTime { get; private set; }
+        public IReadOnlyList<Bank.Bank> Banks => _banks;
 
         public static CentralBank GetInstance(DateTime currentTime)
         {

@@ -56,17 +56,73 @@ namespace Banks
                 Console.WriteLine("1. Register new bank");
                 Console.WriteLine("2. Banks list");
                 Console.WriteLine("3. Return to start menu");
-            }
+                int choice = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
 
-            void ClientManager()
-            {
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Enter the parameters");
+                        Console.WriteLine("Bank name:");
+                        string bankName = Console.ReadLine();
+
+                        Console.WriteLine("Operations limit:");
+                        int operationsLimit = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("Credit negative limit:");
+                        int creditLimit = Convert.ToInt32(Console.ReadLine());
+
+                        Console.WriteLine("Commission:");
+                        double commission = Convert.ToDouble(Console.ReadLine());
+
+                        Console.WriteLine("Debit interest on the balance:");
+                        double debitInterest = Convert.ToDouble(Console.ReadLine());
+
+                        Console.WriteLine(
+                            "Percent for deposit accounts (count, Money borders (count - 1 times), percents (count times)):");
+                        int count = Convert.ToInt32(Console.ReadLine());
+                        var moneyBorders = new List<int>();
+                        for (int i = 0; i < count - 1; i++)
+                        {
+                            moneyBorders.Add(Convert.ToInt32(Console.ReadLine()));
+                        }
+
+                        var percents = new List<double>();
+                        for (int i = 0; i < count; i++)
+                        {
+                            percents.Add(Convert.ToDouble(Console.ReadLine()));
+                        }
+
+                        var percentAmount = new PercentAmount(moneyBorders, percents);
+
+                        centralBank.RegisterNewBank(bankName, operationsLimit, creditLimit, percentAmount, debitInterest, commission);
+
+                        BankManager();
+                        return;
+                    case 2:
+                        foreach (Bank bank in centralBank.Banks)
+                        {
+                            Console.WriteLine($"{bank.Name} id: {bank.Id}");
+                        }
+
+                        Console.WriteLine();
+                        BankManager();
+                        return;
+                    case 3:
+                        StartMenu();
+                        return;
+                    default:
+                        Console.WriteLine("Wrong command");
+                        BankManager();
+                        return;
+                }
             }
 
             void LogIn()
             {
                 Console.WriteLine("1. Log in");
                 Console.WriteLine("2. Register in system");
-                Console.WriteLine("3. Cancel");
+                Console.WriteLine("3. Return to start menu");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine();
 
@@ -139,6 +195,10 @@ namespace Banks
                         LogIn();
                         return;
                 }
+            }
+
+            void ClientManager()
+            {
             }
 
             StartMenu();
