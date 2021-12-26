@@ -50,7 +50,7 @@ namespace Banks.Tests
             Assert.AreEqual(denisDebit.Money, 180000);
             Assert.AreEqual(ivanDebit.Money, 45000);
 
-            bank.CancelOperation(transaction);
+            _centralBank.CancelOperation(transaction);
             Assert.AreEqual(denisDebit.Money, 150000);
             Assert.AreEqual(ivanDebit.Money, 75000);
             

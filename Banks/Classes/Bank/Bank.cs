@@ -39,6 +39,7 @@ namespace Banks.Classes.Bank
         public int CreditNegativeLimit { get; internal set; }
         public PercentAmount DepositInterestOnTheBalance { get; internal set; }
         public IReadOnlyList<AccountTemplate> Accounts => _accounts;
+        public IReadOnlyList<Client.Client> Clients => _clients;
 
         public AccountTemplate AddDebitAccount(Client.Client client, double startMoney)
         {
@@ -85,11 +86,6 @@ namespace Banks.Classes.Bank
             AccountCheck(account);
             OperationLimitCheck(account, amountOfMoney);
             return new WithdrawalTransaction(account, null, amountOfMoney, _currentTime);
-        }
-
-        public AbstractTransaction CancelOperation(AbstractTransaction transaction)
-        {
-            return new CancelTransaction(transaction);
         }
 
         public void RegisterNewClient(Client.Client client)

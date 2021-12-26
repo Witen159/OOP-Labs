@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Banks.Classes.Account;
 using Banks.Classes.Bank;
+using Banks.Classes.Transaction;
 using Banks.Tools;
 
 namespace Banks.Classes
@@ -47,6 +48,11 @@ namespace Banks.Classes
         public Bank.Bank GetBank(int bankId)
         {
             return _banks.Find(x => x.Id == bankId);
+        }
+
+        public AbstractTransaction CancelOperation(AbstractTransaction transaction)
+        {
+            return new CancelTransaction(transaction);
         }
 
         private void PaymentOperation()
