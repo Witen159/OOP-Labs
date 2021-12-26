@@ -14,7 +14,7 @@ namespace Banks
         private static void Main()
         {
             var clientsList = new List<Client>();
-            Client currentClient;
+            Client currentClient = null;
             DateTime startTime = DateTime.Now;
             var centralBank = CentralBank.GetInstance(startTime);
             var cancelRequests = new List<AbstractTransaction>();
