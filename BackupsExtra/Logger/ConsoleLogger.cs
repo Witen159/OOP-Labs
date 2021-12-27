@@ -7,6 +7,10 @@ namespace BackupsExtra.Logger
     {
         public void CreateLog(string message, bool activeTimeCode)
         {
+            using var logger = new LoggerConfiguration()
+                .WriteTo.Console(outputTemplate: "{Message}{NewLine}{Exception}")
+                .CreateLogger();
+            logger.Information(message);
         }
     }
 }

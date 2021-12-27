@@ -18,9 +18,9 @@ namespace BackupsExtra
         public BackupJobExtra(IMethod method, FileSystem fileSystem, ILogger logger)
             : base(method, fileSystem)
         {
-            _method = method ?? throw new Exception("Method is null");
-            _fileSystem = fileSystem ?? throw new Exception("File system is null");
-            _logger = logger ?? throw new Exception("Logger is null");
+            _method = method ?? throw new Exception("Method cant be null");
+            _fileSystem = fileSystem ?? throw new Exception("File system cant be null");
+            _logger = logger ?? throw new Exception("Logger cant be null");
             _jobObjects = new List<FileInfo>();
             _restorePoints = new List<RestorePoint>();
         }
