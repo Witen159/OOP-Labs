@@ -1,6 +1,6 @@
 ﻿namespace BackupsExtra.Logger
 {
-    public interface ILogger
+    public interface IBackupLogger
     {
         void CreateLog(string message, bool activeTimeCode);
     }

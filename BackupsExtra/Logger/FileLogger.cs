@@ -5,7 +5,7 @@ using Serilog.Sinks.File;
 
 namespace BackupsExtra.Logger
 {
-    public class FileLogger : ILogger
+    public class FileLogger : IBackupLogger
     {
         public FileLogger(string path)
         {
@@ -13,12 +13,23 @@ namespace BackupsExtra.Logger
         }
 
         public string Path { get; }
+
         public void CreateLog(string message, bool activeTimeCode)
         {
-            using var logger = new LoggerConfiguration()
-                .WriteTo.File(Path, outputTemplate: "{Message}{NewLine}{Exception}")
-                .CreateLogger();
-            logger.Information(message);
+            if (activeTimeCode)
+            {
+                var logger = new LoggerConfiguration()
+                    .WriteTo.File(Path, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}")
+                    .CreateLogger();
+                logger.Information(message);
+            }
+            else
+            {
+                var logger = new LoggerConfiguration()
+                    .WriteTo.File(Path, outputTemplate: "{Message}{NewLine}{Exception}")
+                    .CreateLogger();
+                logger.Information(message);
+            }
         }
     }
 }
