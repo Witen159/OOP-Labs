@@ -10,7 +10,7 @@ namespace BackupsExtra.Clearing
     {
         public TimeClearing(DateTime dateToClean)
         {
-            if (dateToClean >= DateTime.Now)
+            if (dateToClean > DateTime.Now)
                 throw new Exception("Date for cleaning cannot be in the future");
             DateToClean = dateToClean;
         }

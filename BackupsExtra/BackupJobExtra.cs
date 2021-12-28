@@ -61,7 +61,7 @@ namespace BackupsExtra
             var restorePoint = new RestorePoint(restorePointName, restorePointDirectoryPath);
             _restorePoints.Add(restorePoint);
             _method.Save(_saver, _jobObjects, restorePoint, _fileSystem);
-            _logger.CreateLog($"Create Restore Point {restorePoint.Name} {restorePoint.Id}", ActiveTimeCode);
+            _logger.CreateLog($"Create Restore Point ({restorePoint.Name} {restorePoint.Id})", ActiveTimeCode);
             CleanRestorePoints();
             return restorePoint;
         }
@@ -89,14 +89,14 @@ namespace BackupsExtra
             }
 
             merge.Merge(oldRestorePoint, newRestorePoint, _method);
-            _logger.CreateLog($"Restore points {oldRestorePoint.Name} {oldRestorePoint.Id} and {newRestorePoint.Name} {newRestorePoint.Id} Merged", ActiveTimeCode);
+            _logger.CreateLog($"Restore points ({oldRestorePoint.Name} {oldRestorePoint.Id}) and ({newRestorePoint.Name} {newRestorePoint.Id}) Merged", ActiveTimeCode);
             _restorePoints.Remove(oldRestorePoint);
         }
 
         public void Recovery(RestorePoint restorePoint, IRecovery recovery)
         {
             recovery.Recovery(restorePoint);
-            _logger.CreateLog($"Restore Point {restorePoint.Name} {restorePoint.Id} recovered", ActiveTimeCode);
+            _logger.CreateLog($"Restore Point ({restorePoint.Name} {restorePoint.Id}) recovered", ActiveTimeCode);
         }
 
         public void CleanRestorePoints()
@@ -114,16 +114,19 @@ namespace BackupsExtra
                 cleaner = new VirtualCleaner();
 
             cleaner.Clean(pointsToClean, this);
+            _logger.CreateLog($"Restore points cleaned", ActiveTimeCode);
         }
 
         public void ChangeCleaningMethod(IClearing clearing)
         {
             _clearing = clearing ?? throw new Exception("Clearing method cant be null");
+            _logger.CreateLog($"Cleaning method changed", ActiveTimeCode);
         }
 
         public void RemoveRestorePoint(RestorePoint restorePoint)
         {
             _restorePoints.Remove(restorePoint);
+            _logger.CreateLog($"Restore point ({restorePoint.Name} {restorePoint.Id}) removed", ActiveTimeCode);
         }
     }
 }
