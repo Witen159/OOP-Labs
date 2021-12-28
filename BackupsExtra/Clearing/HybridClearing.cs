@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Backups.Entities;
 using BackupsExtra.Clearing.Combine;
+using BackupsExtra.Tools;
 
 namespace BackupsExtra.Clearing
 {
@@ -14,7 +15,7 @@ namespace BackupsExtra.Clearing
         {
             if (clearings.OfType<HybridClearing>().Any())
             {
-                throw new Exception("You cant combine HybridClearing");
+                throw new BackupExtraException("You cant combine HybridClearing");
             }
 
             _clearingMethods = clearings;

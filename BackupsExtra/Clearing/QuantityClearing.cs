@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Backups.Entities;
+using BackupsExtra.Tools;
 
 namespace BackupsExtra.Clearing
 {
@@ -10,7 +11,7 @@ namespace BackupsExtra.Clearing
         public QuantityClearing(int quantity)
         {
             if (quantity < MinQuantity)
-                throw new Exception($"Quantity of Restore Points should be at least {MinQuantity}");
+                throw new BackupExtraException($"Quantity of Restore Points should be at least {MinQuantity}");
             Quantity = quantity;
         }
 

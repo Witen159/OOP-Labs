@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Backups.Entities;
+using BackupsExtra.Tools;
 
 namespace BackupsExtra.Clearing
 {
@@ -11,7 +12,7 @@ namespace BackupsExtra.Clearing
         public TimeClearing(DateTime dateToClean)
         {
             if (dateToClean > DateTime.Now)
-                throw new Exception("Date for cleaning cannot be in the future");
+                throw new BackupExtraException("Date for cleaning cannot be in the future");
             DateToClean = dateToClean;
         }
 

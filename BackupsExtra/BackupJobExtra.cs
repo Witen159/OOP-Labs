@@ -9,6 +9,7 @@ using BackupsExtra.Clearing;
 using BackupsExtra.Logger;
 using BackupsExtra.Merge;
 using BackupsExtra.Recovery;
+using BackupsExtra.Tools;
 using Single = Backups.Entities.Single;
 
 namespace BackupsExtra
@@ -25,11 +26,11 @@ namespace BackupsExtra
 
         public BackupJobExtra(IMethod method, ISaver saver, FileSystem fileSystem, IBackupLogger logger, IClearing clearing, bool activeTimeCode)
         {
-            _method = method ?? throw new Exception("Method cant be null");
-            _saver = saver ?? throw new Exception("Saver cant be null");
-            _fileSystem = fileSystem ?? throw new Exception("File system cant be null");
-            _logger = logger ?? throw new Exception("Logger cant be null");
-            _clearing = clearing ?? throw new Exception("Clearing method cant be null");
+            _method = method ?? throw new BackupExtraException("Method cant be null");
+            _saver = saver ?? throw new BackupExtraException("Saver cant be null");
+            _fileSystem = fileSystem ?? throw new BackupExtraException("File system cant be null");
+            _logger = logger ?? throw new BackupExtraException("Logger cant be null");
+            _clearing = clearing ?? throw new BackupExtraException("Clearing method cant be null");
             _jobObjects = new List<FileInfo>();
             _restorePoints = new List<RestorePoint>();
             ActiveTimeCode = activeTimeCode;
@@ -42,7 +43,7 @@ namespace BackupsExtra
         {
             var file = new FileInfo(filePath);
             if (!file.Exists)
-                throw new Exception("File doesn't exist");
+                throw new BackupExtraException("File doesn't exist");
             _jobObjects.Add(file);
             _logger.CreateLog($"Add object {file.Name}", ActiveTimeCode);
             return file;
@@ -51,7 +52,7 @@ namespace BackupsExtra
         public void DeleteObject(FileInfo file)
         {
             if (!file.Exists)
-                throw new Exception("No such object");
+                throw new BackupExtraException("No such object");
             _jobObjects.Remove(file);
             _logger.CreateLog($"Delete object {file.Name}", ActiveTimeCode);
         }
@@ -105,7 +106,7 @@ namespace BackupsExtra
             if (pointsToClean.Count == 0)
                 return;
             if (pointsToClean == _restorePoints)
-                throw new Exception("Cleaning all points");
+                throw new BackupExtraException("Cleaning all points");
 
             ICleaner cleaner = null;
             if (_saver is Local)
@@ -119,7 +120,7 @@ namespace BackupsExtra
 
         public void ChangeCleaningMethod(IClearing clearing)
         {
-            _clearing = clearing ?? throw new Exception("Clearing method cant be null");
+            _clearing = clearing ?? throw new BackupExtraException("Clearing method cant be null");
             _logger.CreateLog($"Cleaning method changed", ActiveTimeCode);
         }
 
