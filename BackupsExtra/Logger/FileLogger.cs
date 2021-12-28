@@ -18,14 +18,14 @@ namespace BackupsExtra.Logger
         {
             if (activeTimeCode)
             {
-                var logger = new LoggerConfiguration()
+                using var logger = new LoggerConfiguration()
                     .WriteTo.File(Path, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}")
                     .CreateLogger();
                 logger.Information(message);
             }
             else
             {
-                var logger = new LoggerConfiguration()
+                using var logger = new LoggerConfiguration()
                     .WriteTo.File(Path, outputTemplate: "{Message}{NewLine}{Exception}")
                     .CreateLogger();
                 logger.Information(message);
