@@ -9,13 +9,6 @@ namespace BackupsExtra.Merge
     {
         public void Merge(RestorePoint oldRestorePoint, RestorePoint newRestorePoint, IMethod method)
         {
-            var oldPointDirectory = new DirectoryInfo(oldRestorePoint.PointDirectoryPath);
-            if (method is Single)
-            {
-                oldPointDirectory.Delete(true);
-                return;
-            }
-
             int count = newRestorePoint.Repositories.Count + 1;
             foreach (Repository oldRepository in oldRestorePoint.Repositories)
             {
@@ -44,7 +37,6 @@ namespace BackupsExtra.Merge
 
                     tempDir.Delete(true);
                     newRestorePoint.AddRepository(oldRepository);
-                    oldPointDirectory.Delete(true);
                 }
             }
         }

@@ -7,9 +7,6 @@ namespace BackupsExtra.Merge
     {
         public void Merge(RestorePoint oldRestorePoint, RestorePoint newRestorePoint, IMethod method)
         {
-            if (method is Single)
-                return;
-
             foreach (Repository oldRepository in oldRestorePoint.Repositories)
             {
                 bool inBoth = false;

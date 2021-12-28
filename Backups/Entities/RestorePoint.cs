@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
@@ -18,12 +19,14 @@ namespace Backups.Entities
             DirectoryPath = restorePointDirectoryPath;
             _repositories = new List<Repository>();
             PointDirectoryPath = Path.Combine(DirectoryPath, $"{Name} {Id}");
+            CreationDate = DateTime.Now;
         }
 
         public int Id { get; }
         public string DirectoryPath { get; }
         public string PointDirectoryPath { get; }
         public string Name { get; }
+        public DateTime CreationDate { get; }
 
         public IReadOnlyList<Repository> Repositories => _repositories;
 
