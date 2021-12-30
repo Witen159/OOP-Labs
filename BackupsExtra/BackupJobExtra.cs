@@ -42,8 +42,6 @@ namespace BackupsExtra
         public FileInfo AddObject(string filePath)
         {
             var file = new FileInfo(filePath);
-            if (!file.Exists)
-                throw new BackupExtraException("File doesn't exist");
             _jobObjects.Add(file);
             _logger.CreateLog($"Add object {file.Name}", ActiveTimeCode);
             return file;
@@ -51,7 +49,7 @@ namespace BackupsExtra
 
         public void DeleteObject(FileInfo file)
         {
-            if (!file.Exists)
+            if (!_jobObjects.Contains(file))
                 throw new BackupExtraException("No such object");
             _jobObjects.Remove(file);
             _logger.CreateLog($"Delete object {file.Name}", ActiveTimeCode);
