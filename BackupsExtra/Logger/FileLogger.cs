@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using BackupsExtra.Tools;
 using Serilog;
 using Serilog.Sinks.File;
 
@@ -9,7 +10,7 @@ namespace BackupsExtra.Logger
     {
         public FileLogger(string path)
         {
-            Path = path ?? throw new Exception("Path can't be null");
+            Path = path ?? throw new BackupExtraException("Path can't be null");
         }
 
         public string Path { get; }

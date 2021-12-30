@@ -13,11 +13,6 @@ namespace BackupsExtra.Clearing
         private ICombine _combineType;
         public HybridClearing(List<IClearing> clearings, ICombine combine)
         {
-            if (clearings.OfType<HybridClearing>().Any())
-            {
-                throw new BackupExtraException("You cant combine HybridClearing");
-            }
-
             _clearingMethods = clearings;
             _combineType = combine;
         }
