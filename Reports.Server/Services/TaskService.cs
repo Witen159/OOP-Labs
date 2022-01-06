@@ -1,6 +1,6 @@
 ﻿namespace Reports.Server.Services
 {
-    public class TaskService
+    public class TaskService : ITaskService
     {
         
     }

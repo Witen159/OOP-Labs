@@ -1,6 +1,6 @@
 ﻿namespace Reports.Server.Services
 {
-    public class ReportService
+    public class ReportService : IReportService
     {
         
     }

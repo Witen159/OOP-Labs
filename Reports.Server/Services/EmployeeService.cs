@@ -10,7 +10,7 @@ namespace Reports.Server.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private const string JsonPath = "employees.json";
+        private const string JsonPath = @"C:\Users\User\source\repos\Programming_1\Witen159\Reports.Server\employees.json";
         public Employee Create(string name)
         {
             var employee = new Employee
@@ -18,7 +18,9 @@ namespace Reports.Server.Services
                 Name = name,
                 Id = Guid.NewGuid()
             };
-            var employees = JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8)).ToList();
+            var employees = new List<Employee>();
+            if (new FileInfo(JsonPath).Length != 0)
+                employees = JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8)).ToList();
             employees.Add(employee);
             string json = JsonConvert.SerializeObject(employees);
             using var streamWriter = new StreamWriter(JsonPath);
@@ -35,13 +37,8 @@ namespace Reports.Server.Services
 
         public Employee FindById(Guid id)
         {
-            Guid fakeGuid = Guid.Parse("ac8ac3ce-f738-4cd6-b131-1aa0e16eaadc");
-            if (id == fakeGuid)
-            {
-                // return new Employee(fakeGuid, "Abobus");
-            }
-
-            return null;
+            return JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8))
+                .FirstOrDefault(x => x.Id == id);
         }
     }
 }
