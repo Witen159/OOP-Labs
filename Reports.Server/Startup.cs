@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Reports.Server.Services;
 
 namespace Reports.Server
 {
@@ -32,6 +33,7 @@ namespace Reports.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Reports.Server", Version = "v1" });
             });
+            services.AddScoped<IEmployeeService, EmployeeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
