@@ -9,9 +9,15 @@ namespace Reports.DAL
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Report> Reports { get; set; }
 
-        public ReportsAppContext()
+        public ReportsAppContext(DbContextOptions<ReportsAppContext> options) : base(options)
         {
             Database.EnsureCreated();
+        }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>().ToTable("Employees");
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
