@@ -2,6 +2,7 @@
 
 namespace Reports.DAL.Entities
 {
+    [Serializable]
     public class Employee
     {
         public Employee()
@@ -9,7 +10,7 @@ namespace Reports.DAL.Entities
         }
         
         public Guid Id { get; set; }
-        public int LeadId { get; set; }
+        public Guid LeadId { get; set; }
         public string Name { get; set; }
     }
 }

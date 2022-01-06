@@ -2,11 +2,12 @@
 
 namespace Reports.DAL.Entities
 {
+    [Serializable]
     public class Task
     {
-        public int Id { get; set; }
-        public int Name { get; set; }
-        public int EmployeeId { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid EmployeeId { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime FinishTime { get; set; }
