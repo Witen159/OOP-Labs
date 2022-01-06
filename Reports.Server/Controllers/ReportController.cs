@@ -2,6 +2,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Reports.DAL.Entities;
+using Reports.Server.Interfaces;
 using Reports.Server.Services;
 
 namespace Reports.Server.Controllers
@@ -22,22 +23,43 @@ namespace Reports.Server.Controllers
         {
             return _service.Create(taskId, employeeId, reportContent);
         }
-        
-        [HttpGet]
-        public IActionResult Find([FromQuery] Guid id)
-        {
-            if (id != Guid.Empty)
-            {
-                Report result = _service.FindById(id);
-                if (result != null)
-                {
-                    return Ok(result);
-                }
 
-                return NotFound();
+        [HttpGet]
+        [Route("/reports/id")]
+        public IActionResult FindById([FromQuery] Guid id)
+        {
+            if (id == Guid.Empty) return StatusCode((int) HttpStatusCode.BadRequest);
+            Report result = _service.FindById(id);
+            if (result != null)
+            {
+                return Ok(result);
             }
 
-            return StatusCode((int) HttpStatusCode.BadRequest);
+            return NotFound();
+
+        }
+
+        [HttpGet]
+        [Route("/reports/getAll")]
+        public IActionResult GetAll()
+        {
+            Report[] result = _service.GetAll();
+            if (result.Length != 0)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
+        
+        [HttpDelete]
+        public IActionResult Delete(Guid id)
+        {
+            Report result = _service.Delete(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
         }
     }
 }

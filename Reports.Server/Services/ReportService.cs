@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Reports.DAL.Entities;
+using Reports.Server.Interfaces;
 
 namespace Reports.Server.Services
 {
@@ -24,7 +25,7 @@ namespace Reports.Server.Services
             
             var reports = new List<Report>();
             if (new FileInfo(JsonPath).Length != 0)
-                reports = JsonConvert.DeserializeObject<Report[]>(File.ReadAllText(JsonPath, Encoding.UTF8)).ToList();
+                reports = GetAll().ToList();
             reports.Add(report);
             string json = JsonConvert.SerializeObject(reports);
             using var streamWriter = new StreamWriter(JsonPath);
@@ -36,8 +37,26 @@ namespace Reports.Server.Services
 
         public Report FindById(Guid id)
         {
-            return JsonConvert.DeserializeObject<Report[]>(File.ReadAllText(JsonPath, Encoding.UTF8))
-                .FirstOrDefault(x => x.Id == id);
+            return GetAll().FirstOrDefault(x => x.Id == id);
+        }
+
+        public Report[] GetAll()
+        {
+            return JsonConvert.DeserializeObject<Report[]>(File.ReadAllText(JsonPath, Encoding.UTF8));
+        }
+
+        public Report Delete(Guid id)
+        {
+            var reports = GetAll().ToList();
+            var report = reports.FirstOrDefault(x => x.Id == id);
+            if (report != null)
+                reports.Remove(report);
+            string json = JsonConvert.SerializeObject(reports);
+            using var streamWriter = new StreamWriter(JsonPath);
+            streamWriter.WriteLine(json);
+            streamWriter.Close();
+
+            return report;
         }
     }
 }

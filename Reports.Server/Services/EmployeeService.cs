@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 using Reports.DAL.Entities;
+using Reports.Server.Interfaces;
 
 namespace Reports.Server.Services
 {
@@ -22,7 +23,7 @@ namespace Reports.Server.Services
             
             var employees = new List<Employee>();
             if (new FileInfo(JsonPath).Length != 0)
-                employees = JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8)).ToList();
+                employees = GetAll().ToList();
             employees.Add(employee);
             string json = JsonConvert.SerializeObject(employees);
             using var streamWriter = new StreamWriter(JsonPath);
@@ -34,14 +35,45 @@ namespace Reports.Server.Services
         
         public Employee FindByName(string name)
         {
-            return JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8))
-                .FirstOrDefault(x => x.Name == name);
+            return GetAll().FirstOrDefault(x => x.Name == name);
         }
 
         public Employee FindById(Guid id)
         {
-            return JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8))
-                .FirstOrDefault(x => x.Id == id);
+            return GetAll().FirstOrDefault(x => x.Id == id);
+        }
+
+        public Employee[] GetAll()
+        {
+            return JsonConvert.DeserializeObject<Employee[]>(File.ReadAllText(JsonPath, Encoding.UTF8));
+        }
+
+        public Employee UpdateLead(Guid id, Guid leadId)
+        {
+            var employees = GetAll().ToList();
+            var employee = employees.FirstOrDefault(x => x.Id == id);
+            if (employee != null)
+                employee.LeadId = leadId;
+            string json = JsonConvert.SerializeObject(employees);
+            using var streamWriter = new StreamWriter(JsonPath);
+            streamWriter.WriteLine(json);
+            streamWriter.Close();
+
+            return employee;
+        }
+
+        public Employee Delete(Guid id)
+        {
+            var employees = GetAll().ToList();
+            var employee = employees.FirstOrDefault(x => x.Id == id);
+            if (employee != null)
+                employees.Remove(employee);
+            string json = JsonConvert.SerializeObject(employees);
+            using var streamWriter = new StreamWriter(JsonPath);
+            streamWriter.WriteLine(json);
+            streamWriter.Close();
+
+            return employee;
         }
     }
 }
