@@ -10,7 +10,7 @@ namespace Reports.DAL.Entities
         }
         
         public Guid Id { get; set; }
-        // public Guid LeadId { get; set; }
+        public Guid LeadId { get; set; }
         public string Name { get; set; }
     }
 }

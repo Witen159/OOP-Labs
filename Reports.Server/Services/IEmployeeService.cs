@@ -5,7 +5,7 @@ namespace Reports.Server.Services
 {
     public interface IEmployeeService
     {
-        Employee Create(string name);
+        Employee Create(string name, Guid leadId);
         Employee FindByName(string name);
 
         Employee FindById(Guid id);

@@ -18,9 +18,9 @@ namespace Reports.Server.Controllers
         }
         
         [HttpPost]
-        public Employee Create([FromQuery] string name)
+        public Employee Create([FromQuery] string name, [FromQuery] Guid leadId)
         {
-            return _service.Create(name);
+            return _service.Create(name, leadId);
         }
         
         [HttpGet]
