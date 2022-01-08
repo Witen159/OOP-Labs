@@ -60,6 +60,8 @@ namespace Reports.Server.Services
                 task.State = state;
                 if (state == TaskState.Resolved)
                     task.FinishDate = DateTime.Now;
+                else
+                    task.Changes.Add(DateTime.Now);
             }
 
             string json = JsonConvert.SerializeObject(tasks);
@@ -78,6 +80,25 @@ namespace Reports.Server.Services
             {
                 task.EmployeeId = employeeId;
                 task.State = TaskState.Active;
+                task.Changes.Add(DateTime.Now);
+            }
+
+            string json = JsonConvert.SerializeObject(tasks);
+            using var streamWriter = new StreamWriter(JsonPath);
+            streamWriter.WriteLine(json);
+            streamWriter.Close();
+
+            return task;
+        }
+
+        public Task AddComment(Guid id, string comment)
+        {
+            var tasks = GetAll().ToList();
+            var task = tasks.FirstOrDefault(x => x.Id == id);
+            if (task != null)
+            {
+                task.Comments.Add(comment);
+                task.Changes.Add(DateTime.Now);
             }
 
             string json = JsonConvert.SerializeObject(tasks);

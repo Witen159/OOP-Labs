@@ -90,6 +90,18 @@ namespace Reports.Server.Controllers
             return NotFound();
         }
         
+        [HttpPatch]
+        [Route("/tasks/comment")]
+        public IActionResult UpdateComment(Guid id, string comment)
+        {
+            Task result = _service.AddComment(id, comment);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound();
+        }
+        
         [HttpDelete]
         public IActionResult Delete(Guid id)
         {

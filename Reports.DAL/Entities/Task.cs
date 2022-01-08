@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Reports.DAL.Accessory;
 
 namespace Reports.DAL.Entities
@@ -8,6 +9,8 @@ namespace Reports.DAL.Entities
     {
         public Task()
         {
+            Comments = new List<string>();
+            Changes = new List<DateTime>();
         }
         
         public Guid Id { get; set; }
@@ -17,5 +20,7 @@ namespace Reports.DAL.Entities
         public TaskState State { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
+        public List<string> Comments { get; set; }
+        public List<DateTime> Changes { get; set; }
     }
 }
