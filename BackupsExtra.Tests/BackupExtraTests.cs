@@ -4,6 +4,7 @@ using Backups.Entities;
 using Backups.Interfaces;
 using BackupsExtra.Clearing;
 using BackupsExtra.Logger;
+using BackupsExtra.Save;
 using NUnit.Framework;
 using Single = Backups.Entities.Single;
 
@@ -14,7 +15,7 @@ namespace BackupsExtra.Tests
         private FileSystem _fileSystem = new FileSystem();
         private IMethod _single = new Single();
         private IMethod _split = new Split();
-        private ISaver _virtualSaver = new Virtual();
+        private Save.Save _virtualSAve = new VirtualSave();
         private IBackupLogger _logger = new ConsoleLogger();
         private IClearing _clearing = new QuantityClearing(2);
         private string _dir = @"Witen159\BackupsExtra.Tests\Tests";
@@ -22,7 +23,7 @@ namespace BackupsExtra.Tests
         [Test]
         public void VirtualMerge()
         {
-            var backupJop = new BackupJobExtra(_split, _virtualSaver, _fileSystem, _logger, _clearing, true);
+            var backupJop = new BackupJobExtra(_split, _virtualSAve, _fileSystem, _logger, _clearing, true);
         
             FileInfo file1 = backupJop.AddObject(@"Witen159\BackupsExtra.Tests\FilesForTests\test1.txt");
             FileInfo file2 = backupJop.AddObject(@"Witen159\BackupsExtra.Tests\FilesForTests\test2.txt");
@@ -43,7 +44,7 @@ namespace BackupsExtra.Tests
         {
             IClearing clearing = new QuantityClearing(2); // Все рестор поинты кроме 2-х последних удаляются
             
-            var backupJop = new BackupJobExtra(_split, _virtualSaver, _fileSystem, _logger, clearing, true);
+            var backupJop = new BackupJobExtra(_split, _virtualSAve, _fileSystem, _logger, clearing, true);
             
             FileInfo file1 = backupJop.AddObject(@"Witen159\BackupsExtra.Tests\FilesForTests\test1.txt");
             

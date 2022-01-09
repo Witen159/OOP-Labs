@@ -23,11 +23,15 @@ namespace BackupsExtra
         private ISaver _saver;
         private IBackupLogger _logger;
         private IClearing _clearing;
+        private IMerge _merge;
+        private ICleaner _cleaner;
 
-        public BackupJobExtra(IMethod method, ISaver saver, FileSystem fileSystem, IBackupLogger logger, IClearing clearing, bool activeTimeCode)
+        public BackupJobExtra(IMethod method, Save.Save save, FileSystem fileSystem, IBackupLogger logger, IClearing clearing, bool activeTimeCode)
         {
             _method = method ?? throw new BackupExtraException("Method cant be null");
-            _saver = saver ?? throw new BackupExtraException("Saver cant be null");
+            _saver = save.Saver ?? throw new BackupExtraException("Saver cant be null");
+            _cleaner = save.Cleaner ?? throw new BackupExtraException("Cleaner cant be null");
+            _merge = save.Merge ?? throw new BackupExtraException("Merge cant be null");
             _fileSystem = fileSystem ?? throw new BackupExtraException("File system cant be null");
             _logger = logger ?? throw new BackupExtraException("Logger cant be null");
             _clearing = clearing ?? throw new BackupExtraException("Clearing method cant be null");
@@ -67,27 +71,13 @@ namespace BackupsExtra
 
         public void Merge(RestorePoint oldRestorePoint, RestorePoint newRestorePoint)
         {
-            IMerge merge = null;
-            ICleaner cleaner = null;
-            if (_saver is Local)
-            {
-                merge = new LocalMerge();
-                cleaner = new LocalCleaner();
-            }
-
-            if (_saver is Virtual)
-            {
-                merge = new VirtualMerge();
-                cleaner = new VirtualCleaner();
-            }
-
             if (_method is Single)
             {
-                cleaner.Clean(new List<RestorePoint>() { oldRestorePoint }, this);
+                _cleaner.Clean(new List<RestorePoint>() { oldRestorePoint }, this);
                 return;
             }
 
-            merge.Merge(oldRestorePoint, newRestorePoint, _method);
+            _merge.Merge(oldRestorePoint, newRestorePoint, _method);
             _logger.CreateLog($"Restore points ({oldRestorePoint.Name} {oldRestorePoint.Id}) and ({newRestorePoint.Name} {newRestorePoint.Id}) Merged", ActiveTimeCode);
             _restorePoints.Remove(oldRestorePoint);
         }
@@ -106,13 +96,7 @@ namespace BackupsExtra
             if (pointsToClean == _restorePoints)
                 throw new BackupExtraException("Cleaning all points");
 
-            ICleaner cleaner = null;
-            if (_saver is Local)
-                cleaner = new LocalCleaner();
-            if (_saver is Virtual)
-                cleaner = new VirtualCleaner();
-
-            cleaner.Clean(pointsToClean, this);
+            _cleaner.Clean(pointsToClean, this);
             _logger.CreateLog($"Restore points cleaned", ActiveTimeCode);
         }
 
