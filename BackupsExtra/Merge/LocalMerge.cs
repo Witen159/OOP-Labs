@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using Backups.Entities;
 using Backups.Interfaces;
 
@@ -12,32 +13,22 @@ namespace BackupsExtra.Merge
             int count = newRestorePoint.Repositories.Count + 1;
             foreach (Repository oldRepository in oldRestorePoint.Repositories)
             {
-                bool inBoth = false;
-                foreach (Repository newRepository in newRestorePoint.Repositories)
+                bool inBoth = newRestorePoint.Repositories.Any(newRepository => newRepository.Storages[0].Name == oldRepository.Storages[0].Name);
+
+                if (inBoth) continue;
+                var tempDir = new DirectoryInfo(Path.Combine(newRestorePoint.DirectoryPath, "TempDir"));
+                tempDir.Create();
+
+                foreach (FileInfo file in oldRepository.Storages)
                 {
-                    if (newRepository.Storages[0].Name == oldRepository.Storages[0].Name)
-                    {
-                        inBoth = true;
-                        break;
-                    }
+                    file.CopyTo(Path.Combine(tempDir.FullName, file.Name), true);
                 }
 
-                if (!inBoth)
-                {
-                    var tempDir = new DirectoryInfo(Path.Combine(newRestorePoint.DirectoryPath, "TempDir"));
-                    tempDir.Create();
+                ZipFile.CreateFromDirectory(tempDir.FullName, Path.Combine(newRestorePoint.PointDirectoryPath, $"Files_{count}.zip"));
+                count++;
 
-                    foreach (FileInfo file in oldRepository.Storages)
-                    {
-                        file.CopyTo(Path.Combine(tempDir.FullName, file.Name), true);
-                    }
-
-                    ZipFile.CreateFromDirectory(tempDir.FullName, Path.Combine(newRestorePoint.PointDirectoryPath, $"Files_{count}.zip"));
-                    count++;
-
-                    tempDir.Delete(true);
-                    newRestorePoint.AddRepository(oldRepository);
-                }
+                tempDir.Delete(true);
+                newRestorePoint.AddRepository(oldRepository);
             }
         }
     }
