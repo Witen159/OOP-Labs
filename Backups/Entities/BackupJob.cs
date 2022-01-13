@@ -23,7 +23,7 @@ namespace Backups.Entities
 
         public RestorePoint CreateRestorePoint(ISaver saver, string restorePointName, string restorePointDirectoryPath)
         {
-            var restorePoint = new RestorePoint(restorePointName, restorePointDirectoryPath);
+            var restorePoint = new RestorePoint(restorePointName, restorePointDirectoryPath, DateTime.Now);
             _restorePoints.Add(restorePoint);
             _method.Save(saver, _jobObjects, restorePoint, _fileSystem);
             return restorePoint;
