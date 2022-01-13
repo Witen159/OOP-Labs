@@ -61,7 +61,7 @@ namespace BackupsExtra
 
         public RestorePoint CreateRestorePoint(string restorePointName, string restorePointDirectoryPath)
         {
-            var restorePoint = new RestorePoint(restorePointName, restorePointDirectoryPath);
+            var restorePoint = new RestorePoint(restorePointName, restorePointDirectoryPath, DateTime.Now);
             _restorePoints.Add(restorePoint);
             _method.Save(_saver, _jobObjects, restorePoint, _fileSystem);
             _logger.CreateLog($"Create Restore Point ({restorePoint.Name} {restorePoint.Id})", ActiveTimeCode);

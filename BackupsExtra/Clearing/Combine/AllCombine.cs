@@ -7,13 +7,12 @@ namespace BackupsExtra.Clearing.Combine
     {
         public List<RestorePoint> CombineCleaning(List<IClearing> clearings, List<RestorePoint> restorePoints)
         {
-            List<RestorePoint> pointsToClean = restorePoints;
             foreach (IClearing clearing in clearings)
             {
-                pointsToClean = clearing.Clearing(pointsToClean);
+                restorePoints = clearing.Clearing(restorePoints);
             }
 
-            return pointsToClean;
+            return restorePoints;
         }
     }
 }

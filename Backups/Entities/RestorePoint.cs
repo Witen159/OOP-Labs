@@ -11,7 +11,7 @@ namespace Backups.Entities
 
         private List<Repository> _repositories;
 
-        public RestorePoint(string restorePointName, string restorePointDirectoryPath)
+        public RestorePoint(string restorePointName, string restorePointDirectoryPath, DateTime creationDate)
         {
             Id = _currentId;
             _currentId++;
@@ -19,7 +19,7 @@ namespace Backups.Entities
             DirectoryPath = restorePointDirectoryPath;
             _repositories = new List<Repository>();
             PointDirectoryPath = Path.Combine(DirectoryPath, $"{Name} {Id}");
-            CreationDate = DateTime.Now;
+            CreationDate = creationDate;
         }
 
         public int Id { get; }

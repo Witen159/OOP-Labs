@@ -11,26 +11,19 @@ namespace BackupsExtra.Logger
         public FileLogger(string path)
         {
             Path = path ?? throw new BackupExtraException("Path can't be null");
+            Logger = new LoggerConfiguration();
         }
 
         public string Path { get; }
+        public LoggerConfiguration Logger { get; }
 
         public void CreateLog(string message, bool activeTimeCode)
         {
-            if (activeTimeCode)
-            {
-                using var logger = new LoggerConfiguration()
-                    .WriteTo.File(Path, outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}")
-                    .CreateLogger();
-                logger.Information(message);
-            }
-            else
-            {
-                using var logger = new LoggerConfiguration()
-                    .WriteTo.File(Path, outputTemplate: "{Message}{NewLine}{Exception}")
-                    .CreateLogger();
-                logger.Information(message);
-            }
+            string template = activeTimeCode ? "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}" : "{Message}{NewLine}{Exception}";
+
+            using Serilog.Core.Logger logger = Logger.WriteTo.File(Path, outputTemplate: template)
+                .CreateLogger();
+            logger.Information(message);
         }
     }
 }

@@ -5,22 +5,20 @@ namespace BackupsExtra.Logger
 {
     public class ConsoleLogger : IBackupLogger
     {
+        public ConsoleLogger()
+        {
+            Logger = new LoggerConfiguration();
+        }
+
+        public LoggerConfiguration Logger { get; }
         public void CreateLog(string message, bool activeTimeCode)
         {
-            if (activeTimeCode)
-            {
-                using var logger = new LoggerConfiguration()
-                    .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}")
-                    .CreateLogger();
-                logger.Information(message);
-            }
-            else
-            {
-                using var logger = new LoggerConfiguration()
-                    .WriteTo.Console(outputTemplate: "{Message}{NewLine}{Exception}")
-                    .CreateLogger();
-                logger.Information(message);
-            }
+            string template = activeTimeCode ? "{Timestamp:yyyy-MM-dd HH:mm:ss} {Message}{NewLine}{Exception}" : "{Message}{NewLine}{Exception}";
+
+            using Serilog.Core.Logger logger = new LoggerConfiguration()
+                .WriteTo.Console(outputTemplate: template)
+                .CreateLogger();
+            logger.Information(message);
         }
     }
 }

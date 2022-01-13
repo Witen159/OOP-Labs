@@ -7,7 +7,7 @@ namespace BackupsExtra
     {
         public void SaveBackupJob(BackupJobExtra backupJob, string path)
         {
-            string json = JsonConvert.SerializeObject(backupJob);
+            string json = JsonConvert.SerializeObject(backupJob, Formatting.Indented, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
             using var streamWriter = new StreamWriter(path);
             streamWriter.WriteLine(json);
         }
