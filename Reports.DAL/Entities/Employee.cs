@@ -8,7 +8,6 @@ namespace Reports.DAL.Entities
         public Employee()
         {
         }
-        
         public Guid Id { get; set; }
         public Guid LeadId { get; set; }
         public string Name { get; set; }

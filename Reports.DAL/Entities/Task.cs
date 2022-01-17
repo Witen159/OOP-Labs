@@ -12,7 +12,6 @@ namespace Reports.DAL.Entities
             Comments = new List<string>();
             Changes = new List<DateTime>();
         }
-        
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid EmployeeId { get; set; }
