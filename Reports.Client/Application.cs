@@ -8,9 +8,7 @@ namespace Reports.Client
 {
     public class Application
     {
-        private IManager _employeeManager = new EmployeeManager();
-        private IManager _taskManager = new TaskManager();
-        private IManager _reportManager = new ReportManager();
+        private IManager _manager = null;
         public Application()
         {
             Console.WriteLine("Please use command numbers is our application");
@@ -29,21 +27,23 @@ namespace Reports.Client
             switch (choice)
             {
                 case 1:
-                    _employeeManager.Manager();
+                    _manager = new EmployeeManager();
                     break;
                 case 2:
-                    _taskManager.Manager();
+                    _manager = new TaskManager();
                     break;
                 case 3:
-                    _reportManager.Manager();
+                    _manager = new ReportManager();
                     break;
                 case 4:
                     return;
                 default:
                     Console.WriteLine("Wrong command");
-                    break;
+                    StartApplication();
+                    return;
             }
 
+            _manager.Manager();
             StartApplication();
         }
     }
