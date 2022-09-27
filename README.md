@@ -1,36 +1,37 @@
-# ООП, 3 семестр
+# OOP, 3 semester of ITMO univercity
 
-## Лабораторная 0. Isu
-Реализация простейшей системы учета студентов\
-Знакомство с языком `C#`\
-Знакомство с базовыми механизмами `ООП`
+## Lab 0. Isu
+Implementation of simple student accounting system\
+Getting to know the `C#` language\
+Familiarity with the basic mechanisms of `OOP`
 
-## Лабораторная 1. Shops
-Реализация системы отношений Магазинов и покупателей\
-Выделение сущнойстей и проектирование по ним Классов
+## Lab 1. Shops
+Implementation of Stores and customers relations system\
+Selecting Entities and designing Classes based on them
 
-## Лабораторная 2. IsuExtra
-Реализация системы записи студентов на ОГНП\
-Выделение зон ответственности разных сущностей и проектирование связей между ними.
+## Lab 2. IsuExtra
+Implementation of the system of students' registration on the OGNP\
+The allocation of areas of responsibility for different entities and design of relationships between them
 
-## Лабораторная 3. Backups
-Реализация простейшей системы Бекапов\
-Применение принципов из `SOLID`, `GRASP`\
-Работа с файловой и виртуальной системами
+## Lab 3. Backups
+Implementation of simple backup system\
+Applying `SOLID` and `GRASP` principles\
+Working with file and virtual systems
 
-## Лабораторная 4. Banks
-Реализация Банковской системы со Счетами и Клиентами, а так же денежных операций в ее пределах\
-Использование всевозможных паттернов:
+## Lab 4. Banks
+Implementation of the Banking System with Accounts and Clients, as well as monetary transactions within it\
+Using all kinds of patterns:
 * `Builder`
 * `Observer`
 * `Strategy`
 * `Singleton`
+* etc
 
-## Лабораторная 5. BackupsExtra
-Реализация мержа точек и сохранения состояния системы при перезапуске приложения\
-Использование `NuGet` и сторонних библиотек\
-Логгированием и использование `Json` файлов для сохранения состояния системы
+## Lab 5. BackupsExtra
+The implementation of points merge and saving the state of the system when restarting the application\
+Using `NuGet` and third-party libraries\
+Logging and using `Json` files to save the system state
 
-## Лабораторная 6. Reports
-Реализация простейшего `BackEnd` приложения\
-Ипспользование многослойной архитектуры
+## Lab 6. Reports
+Implementation of simple `BackEnd` application\
+Using a multi-layer architecture
